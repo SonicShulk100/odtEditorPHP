@@ -32,13 +32,13 @@ class UtilisateurDAO {
      * Vérification en cas de connexion.
      * @param string|null $login le login(en email)
      * @param string|null $mdp le MDP (encodage MD5)
-     * @return bool TRUE si l'utilisateur existe, FALSE sinon
+     * @return array|bool TRUE si l'utilisateur existe et crée une array contenant les données, FALSE sinon.
      */
-    public static function verif(?string $login, ?string $mdp): bool{
+    public static function verif(?string $login, ?string $mdp): array|bool{
         $db = new PDO(Param::DSN, Param::USER, Param::PASS);
         try{
             //Requête SQL
-            $SQL = "SELECT nom, prenom FROM utilisateur WHERE login = ? AND mdp = md5(?)";
+            $SQL = "SELECT * FROM utilisateur WHERE login = ? AND mdp = md5(?)";
 
             //Préparation de la requête SQL
             $stmt = $db->prepare($SQL);

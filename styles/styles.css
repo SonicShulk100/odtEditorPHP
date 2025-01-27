@@ -1,0 +1,19 @@
+.present li{
+    display: inline-block;
+    text-decoration: none;
+}
+
+footer{
+    margin-top: 20px;
+    text-align: center;
+    position: fixed;
+    bottom:0;
+    left: 10px;
+    right: 10px;
+    padding: 5px;
+}
+
+#tableFichiersODTUtilisateur{
+    border-width: thick;
+    border-color: black;
+}

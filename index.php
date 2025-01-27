@@ -1,5 +1,5 @@
 <?php
-
+require_once "lib/autoloader.php";
 use Random\RandomException;
 
 if(!isset($_SESSION)){

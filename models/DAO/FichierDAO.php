@@ -45,27 +45,24 @@ class FichierDAO {
      * @param int|null $idUtilisateur l'ID de l'utilisateur
      * @return bool|array Les données sous format JSON
      */
-    public static function getFichiersByIdUtilisateur(?int $idUtilisateur): bool|array{
+    public static function getFichiersByIdUtilisateur(?int $idUtilisateur): bool|array
+    {
+        if (!$idUtilisateur) {
+            return [];
+        }
+
         $db = new PDO(Param::DSN, Param::USER, Param::PASS);
 
-        try{
-            //Requête SQL
+        try {
             $SQL = "SELECT * FROM fichier WHERE idUtilisateur = :idUtilisateur";
-
-            //Préparation de la requête SQL
             $stmt = $db->prepare($SQL);
-
-            //Mise en place des paramètres.
-            $stmt->bindParam(":idUtilisateur", $idUtilisateur);
-
-            //Exécution de la requête
+            $stmt->bindParam(":idUtilisateur", $idUtilisateur, PDO::PARAM_INT);
             $stmt->execute();
 
-            //Récupération des fichiers.
-            return $stmt->fetchAll(PDO::FETCH_ASSOC);
-        }
-        catch(PDOException $e){
-            die('Erreur : '.$e->getMessage());
+            return $stmt->fetchAll(PDO::FETCH_ASSOC) ?: [];
+        } catch (PDOException $e) {
+            error_log('Erreur : ' . $e->getMessage());
+            return [];
         }
     }
 
