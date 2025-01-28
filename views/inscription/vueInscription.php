@@ -18,7 +18,7 @@ if (!isset($_SESSION['csrfToken'])){
     </nav>
     <section>
         <h2>Inscription</h2>
-        <form action="/index.php?action=inscrire" method="post">
+        <form action="/index.php?action=inscription" method="post">
             <label for="nom">Nom : </label>
             <input type="text" id="nom" name="nom" required/>
 
@@ -39,7 +39,7 @@ if (!isset($_SESSION['csrfToken'])){
 
             <br>
 
-            <input type="hidden" value="<?php echo $_SESSION['csrfToken'];?>"
+            <input type="hidden" value="<?php echo $_SESSION['csrfToken'];?>"/>
             <input type="submit" value="Inscrire"/>
         </form>
         <?php if(isset($error)): ?>
