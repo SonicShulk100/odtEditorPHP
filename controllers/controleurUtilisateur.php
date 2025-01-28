@@ -1,5 +1,6 @@
 <?php
 /**
+ * Controleur de la page de l'utilisateur.
  * @return void
  */
 function utilisateur(): void
@@ -13,10 +14,13 @@ function utilisateur(): void
 }
 
 /**
- * Verification si on est bien connecté.
- * @return bool TRUE si on est connecté, FALSE sinon.
+ * Vérifie si l'utilisateur est connecté.
+ * @return bool TRUE si connecté, FALSE sinon.
  */
 function estConnecte(): bool
 {
-    return isset($_SESSION['idUtilisateur']) && is_numeric($_SESSION['idUtilisateur']);
+    return session_status() === PHP_SESSION_ACTIVE &&
+        isset($_SESSION['idUtilisateur']) &&
+        isset($_SESSION['connecte']) &&
+        $_SESSION['connecte'] === true;
 }

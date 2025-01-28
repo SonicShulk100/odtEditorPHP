@@ -1,3 +1,17 @@
+<?php
+
+use Random\RandomException;
+
+if (!isset($_SESSION['csrfToken'])){
+    try{
+        $_SESSION['csrfToken'] = bin2hex(random_bytes(32));
+    }
+    catch(RandomException $e){
+        die($e->getMessage());
+    }
+}
+?>
+
 <div class="container">
     <nav>
         <?php require_once 'views/haut.php'; ?>

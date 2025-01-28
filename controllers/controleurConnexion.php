@@ -1,5 +1,12 @@
 <?php
+
+use JetBrains\PhpStorm\NoReturn;
+
 require_once "models/Param.php";
+
+if(session_status() == PHP_SESSION_NONE){
+    session_start();
+}
 
 /**
  * Contrôleur entière de la connexion
@@ -7,32 +14,44 @@ require_once "models/Param.php";
  */
 function connexion(): void
 {
-    //Si la méthode est POST
+
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $email = $_POST['login'];
+        $password = $_POST['password'];
 
-        //Alors on prend le login et le password.
-        $login = $_POST['login'] ?? null;
-        $password = $_POST['password'] ?? null;
+        // Exemple de vérification dans la base de données
+        $utilisateur = UtilisateurDAO::verif($email, $password);
 
-        //Si les deux ne sont pas vides...
-        if ($login && $password) {
-            //Mise en relation de la base de données avec l'obet UtilisateurDAO.
-            $user = UtilisateurDAO::verif($login, $password);
-
-            //Si c'est TRUE
-            if ($user) {
-                $_SESSION['idUtilisateur'] = $user['idUtilisateur']; // Stocker l'ID de l'utilisateur
-                header('Location: index.php?action=utilisateur');
-                exit();
-            } else {
-                $erreur = "Nom d'utilisateur ou mot de passe incorrect.";
-                include "views/connexion/vueConnexion.php";
-            }
+        if ($utilisateur) {
+            $_SESSION['connecte'] = true;
+            $_SESSION['idUtilisateur'] = $utilisateur['idUtilisateur'];
+            header('Location: index.php?action=utilisateur');
+            exit();
         } else {
-            $erreur = "Veuillez remplir tous les champs.";
-            include "views/connexion/vueConnexion.php";
+            echo 'Erreur : Identifiants incorrects.';
         }
     }
 
-    include "views/connexion/vueConnexion.php";
+    include 'views/connexion/vueConnexion.php';
 }
+
+/**
+ * Contrôleur pour déconnecter l'utilisateur.
+ * @return void
+ */
+#[NoReturn]
+function deconnexion(): void
+{
+    session_start(); // Assurez-vous que la session est démarrée
+
+    // Supprimer toutes les variables de session
+    $_SESSION = [];
+
+    // Détruire la session
+    session_destroy();
+
+    // Rediriger l'utilisateur vers la page d'accueil ou de connexion
+    header('Location: index.php?action=connecter');
+    exit();
+}
+

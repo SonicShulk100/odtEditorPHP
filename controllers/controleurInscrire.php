@@ -1,6 +1,6 @@
 <?php
 /**
- * Contrôleur d'inscription.
+ * Contrôleur entière de l'inscription.
  * @return void Le contrôleur gère l'inscription.
  */
 function inscrire(): void

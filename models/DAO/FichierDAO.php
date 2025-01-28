@@ -5,14 +5,20 @@ class FichierDAO {
      * @return array|bool les données sous format JSON
      */
     public static function getAllFichiers(): array|bool{
+        //Instanciation d'un PDO
         $db = new PDO(Param::DSN, Param::USER, Param::PASS);
 
         try{
+            //Requête SQL
             $SQL = "SELECT * FROM fichier";
 
+            //Préparation de la requête SQL
             $stmt = $db->prepare($SQL);
+
+            //Exécution de la requête
             $stmt->execute();
 
+            //Récupération des données
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         }
         catch(PDOException $e){
@@ -112,11 +118,10 @@ class FichierDAO {
      * @param int|null $idFichier L'ID du fichier en question
      * @param string|null $nomFichier le nom du fichier en question
      * @param string|null $contenu le contenu du fichier en quesion
-     * @param DateTime|null $dateMaJ la nouvelle date MAJ du fichier en quesiton
      * @param int|null $idUtilisateur l'ID de l'utilisateur
      * @return bool TRUE si la MAJ est fait, FALSE sinon.
      */
-    public static function updateFichier(?int $idFichier, ?string $nomFichier, ?string $contenu, ?DateTime $dateMaJ, ?int $idUtilisateur): bool{
+    public static function updateFichier(?int $idFichier, ?string $nomFichier, ?string $contenu, ?int $idUtilisateur): bool{
         $db = new PDO(Param::DSN, Param::USER, Param::PASS);
         $db->exec("SET AUTOCOMMIT=0");
         $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -124,15 +129,15 @@ class FichierDAO {
         try{
             $db->beginTransaction();
 
-            $sql = "UPDATE fichier SET nomFichier = ?, contenuFichier = ?, dateMaJ = ? WHERE idFichier = ? OR idUtilisateur = ?";
+            $sql = "UPDATE fichier SET nomFichier = ?, contenuFichier = ?, dateMaJ = CURRENT_DATE WHERE idFichier = ? OR idUtilisateur = ?";
 
             //Préparation de la requête SQL
             $stmt = $db->prepare($sql);
 
             //Mise en place des paramètres
 
-            //Execution
-            $stmt->execute([$nomFichier, $contenu, $idFichier, $dateMaJ, $idUtilisateur]);
+            //Execution de la requête avec les paramètres.
+            $stmt->execute([$nomFichier, $contenu, $idFichier, $idUtilisateur]);
 
             //Commitage
             return $db->commit();
