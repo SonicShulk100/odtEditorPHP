@@ -29,9 +29,9 @@ class FichierDAO {
     /**
      * Récupération du fichier en question dans la base de données.
      * @param int|null $id l'ID du fichier en quesiton
-     * @return bool TRUE si il existe, FALSE sinon.
+     * @return array|bool TRUE si il existe, FALSE sinon.
      */
-    public static function getFichierById(?int $id): bool{
+    public static function getFichierById(?int $id): array|bool{
         $db = new PDO(Param::DSN, Param::USER, Param::PASS);
 
         try{

@@ -18,6 +18,7 @@ function fichierUpload(): void {
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['fileUpload'])) {
         if ($_FILES['fileUpload']['error'] === UPLOAD_ERR_OK) {
+            //Récupération du chemin temporaire et le nom du fichier
             $tmpFile = $_FILES['fileUpload']['tmp_name'];
             $fileName = $_FILES['fileUpload']['name'];
 
