@@ -12,6 +12,7 @@ if(session_status() == PHP_SESSION_NONE){
         <button class="button"><a href="../index.php?action=importer">Importer un fichier ODT</a></button>
         <button class="button"><a href="../index.php?action=créer">Créer un fichier ODT</a></button>
         <button class="button"><a href="../index.php?action=deconnexion">Déconnexion</a></button>
+        <button class="buttin"><a href="../index.php?action=utilisateur">Mon compte</a></button>
     <?php else: ?>
         <button class="button"><a href="../index.php?action=inscription">S'inscrire</a></button>
         <button class="button"><a href="../index.php?action=connecter">Se connecter</a></button>

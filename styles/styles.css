@@ -2,13 +2,14 @@
     display: inline-block;
     text-decoration: none;
     background-color:cadetblue;
+    margin-top: 25cm;
 }
 
 footer{
-    margin-top: 20px;
+    margin-top: 50px;
     text-align: center;
     position: fixed;
-    bottom:0;
+    bottom: 0;
     left: 10px;
     right: 10px;
     padding: 5px;
@@ -17,4 +18,14 @@ footer{
 #tableFichiersODTUtilisateur{
     border-width: thick;
     border-color: black;
+}
+
+.button{
+    background-color: cadetblue;
+    font-size: 45px;
+    font-family: Consolas, sans-serif;
+    color: beige;
+    text-decoration: none;
+    display: inline-flex;
+    margin-right: 200px;
 }
