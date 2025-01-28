@@ -10,25 +10,28 @@
                     <th>Nom du fichier</th>
                     <th>Contenu du fichier</th>
                     <th>Date de création</th>
-                    <th>Date MAJ</th>
+                    <th>Date de mise à Jour</th>
                     <th>ID de l'utilisateur</th>
                     <th>Action</th>
                 </tr>
             </thead>
             <tbody>
             <?php
-            $Files = FichierDAO::getFichiersByIdUtilisateur((int)$_SESSION['idUtilisateur']);
-            foreach ($Files as $odt){
+            $fichiers = FichierDAO::getFichiersByIdUtilisateur((int)$_SESSION['idUtilisateur']);
+
+            // Affichage des fichiers dans le tableau
+            foreach ($fichiers as $fichier) {
                 echo "<tr>";
-                echo "<td>".$odt->getId()."</td>";
-                echo "<td>".$odt->getNom()."</td>";
-                echo "<td>".$odt->getContenu()."</td>";
-                echo "<td>".$odt->getDateCreation()."</td>";
-                echo "<td>".$odt->getDateModification()."</td>";
-                echo "<td>".$odt->getIdUtilisateur()."</td>";
+                echo "<td>" . htmlspecialchars($fichier->getId()) . "</td>";
+                echo "<td>" . htmlspecialchars($fichier->getNom()) . "</td>";
+                echo "<td>" . htmlspecialchars($fichier->getContenu()) . "</td>";
+                echo "<td>" . htmlspecialchars($fichier->getCreatedAt()) . "</td>";
+                echo "<td>" . htmlspecialchars($fichier->getUpdatedAt()) . "</td>";
+                echo "<td>" . htmlspecialchars($fichier->getIdUtilisateur()) . "</td>";
                 echo "<td>
-                        <a href='/index.php?action=modifierFichier&id=".$odt->getId()."'>Modifier le fichier</a>
-                        <a href='/index.php?action=supprimerFichier&id=".$odt->getId()."'>Supprimer le fichier</a>";
+                        <a href='/index.php?action=modifierFichier&id=" . htmlspecialchars($fichier->getId()) . "'>Modifier</a>
+                        <a href='/index.php?action=supprimerFichier&id=" . htmlspecialchars($fichier->getId()) . "'>Supprimer</a>
+                      </td>";
                 echo "</tr>";
             }
             ?>

@@ -65,10 +65,25 @@ class FichierDAO {
             $stmt->bindParam(":idUtilisateur", $idUtilisateur, PDO::PARAM_INT);
             $stmt->execute();
 
-            return $stmt->fetchAll(PDO::FETCH_ASSOC) ?: [];
+            $fichiers = [];
+
+            while($row = $stmt->fetch(PDO::FETCH_ASSOC)){
+                $fichiers[] = new Fichier(
+                    $row['idFichier'],
+                    $row['nomFichier'],
+                    $row['contenuFichier'],
+                    $row['dateAjout'],
+                    $row['dateMaJ'],
+                    $row['idUtilisateur']
+                );
+            }
+
+            return $fichiers;
         } catch (PDOException $e) {
             error_log('Erreur : ' . $e->getMessage());
             return [];
+        } catch (Exception $e) {
+            die('Erreur : ' . $e->getMessage());
         }
     }
 
@@ -76,12 +91,10 @@ class FichierDAO {
      * Insertion d'un fichier dans la base de données.
      * @param string|null $nomFichier Le nom du fichier
      * @param string|null $contenu Le contenu deu fichier
-     * @param DateTime|null $dateAjout La date de l'ajout qui ne doit pas être changé
-     * @param DateTime|null $dateMaj La date de la modification qui doit être changé
      * @param int|null $idUtilisateur L'ID de l'utilisateur.
      * @return bool TRUE si l'insertion a été fait, FALSE sinon
      */
-    public static function createFichier(?string $nomFichier, ?string $contenu, ?DateTime $dateAjout, ?DateTime $dateMaj, ?int $idUtilisateur): bool{
+    public static function createFichier(?string $nomFichier, ?string $contenu, ?int $idUtilisateur): bool{
         $db = new PDO(Param::DSN, Param::USER, Param::PASS);
         $db->exec("SET AUTOCOMMIT=0");
         $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -89,7 +102,7 @@ class FichierDAO {
         try{
             $db->beginTransaction();
 
-            $sql = "INSERT INTO fichier (nomFichier, contenuFichier, dateAjout, dateMaJ, idUtilisateur) VALUES (?, ?, ?, ?, ?)";
+            $sql = "INSERT INTO fichier (nomFichier, contenuFichier, dateAjout, dateMaJ, idUtilisateur) VALUES (?, ?, current_date, current_date, ?)";
 
             //Préparation de la requête SQL
             $stmt = $db->prepare($sql);
@@ -97,9 +110,7 @@ class FichierDAO {
             //Mise en place des paramètres
             $stmt->bindParam(1, $nomFichier);
             $stmt->bindParam(2, $contenu);
-            $stmt->bindParam(3, $dateAjout);
-            $stmt->bindParam(4, $dateMaj);
-            $stmt->bindParam(5, $idUtilisateur);
+            $stmt->bindParam(3, $idUtilisateur);
 
             //Exécution
             $stmt->execute();

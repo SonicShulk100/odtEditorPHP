@@ -35,12 +35,9 @@ function fichierUpload(): void {
                 return;
             }
 
-            // Ajout dans la base de données
-            $dateAjout = new DateTime();
-            $dateMaj = new DateTime();
             $idUtilisateur = $_SESSION['idUtilisateur']; // Récupérer l'ID de l'utilisateur connecté
 
-            $result = FichierDAO::createFichier($fileName, $content, $dateAjout, $dateMaj, $idUtilisateur);
+            $result = FichierDAO::createFichier($fileName, $content, $idUtilisateur);
 
             if ($result) {
                 echo 'Le fichier a été importé avec succès.';

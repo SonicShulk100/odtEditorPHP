@@ -4,23 +4,20 @@ class Fichier{
     private ?int $id;
     private ?string $nom;
     private ?string $contenu;
-    private ?DateTime $createdAt;
-    private ?DateTime $updatedAt;
+    private DateTime|string|null $createdAt;
+    private DateTime|string|null $updatedAt;
 
     private ?int $idUtilisateur;
 
     /**
-     * Constructeur du fichier en question ainsi avec les getters et setters.
      * @param int|null $id
      * @param string|null $nom
      * @param string|null $contenu
-     * @param DateTime|null $createdAt
-     * @param DateTime|null $updatedAt
+     * @param DateTime|string|null $createdAt
+     * @param DateTime|string|null $updatedAt
      * @param int|null $idUtilisateur
      */
-
-    //Constructeur => Instanciation
-    public function __construct(?int $id, ?string $nom, ?string $contenu, ?DateTime $createdAt, ?DateTime $updatedAt, ?int $idUtilisateur)
+    public function __construct(?int $id, ?string $nom, ?string $contenu, DateTime|string|null $createdAt, DateTime|string|null $updatedAt, ?int $idUtilisateur)
     {
         $this->id = $id;
         $this->nom = $nom;
@@ -47,12 +44,12 @@ class Fichier{
         return $this->contenu;
     }
 
-    public function getCreatedAt(): ?DateTime
+    public function getCreatedAt(): DateTime|string|null
     {
         return $this->createdAt;
     }
 
-    public function getUpdatedAt(): ?DateTime
+    public function getUpdatedAt(): DateTime|string|null
     {
         return $this->updatedAt;
     }
