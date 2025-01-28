@@ -2,7 +2,7 @@
     display: inline-block;
     text-decoration: none;
     background-color:cadetblue;
-    margin-top: 25cm;
+    margin-top: 25px;
 }
 
 footer{
@@ -20,12 +20,40 @@ footer{
     border-color: black;
 }
 
+body{
+    background-color: darkcyan;
+}
+
 .button{
     background-color: cadetblue;
-    font-size: 45px;
+    font-size: 25px;
     font-family: Consolas, sans-serif;
-    color: beige;
     text-decoration: none;
     display: inline-flex;
-    margin-right: 200px;
+    margin-right: 25px;
+    color: black;
+}
+
+a{
+    text-decoration: none;
+}
+
+a:visited{
+    text-decoration: none;
+    color: black;
+}
+
+a:hover{
+    text-decoration: none;
+    color: bisque;
+}
+
+#tableFichiersODTUtilisateur a{
+    text-decoration: none;
+    color: black;
+}
+
+#tableFichiersODTUtilisateur a:hover{
+    text-decoration: none;
+    color: bisque;
 }

@@ -9,7 +9,7 @@ if(!isset($_SESSION)){
 <!DOCTYPE html>
 <html lang="fr">
     <head>
-        <title>Editeut de fichier ODT</title>
+        <title>Editeur de fichier ODT</title>
         <meta charset="UTF-8"/>
         <link rel="stylesheet" href="styles/styles.css"/>
         <meta http-equiv="content-security-policy" content="default-src 'self' script-src 'self'"/>

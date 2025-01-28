@@ -5,12 +5,16 @@ require_once "controleurInscrire.php";
 require_once "controleurUtilisateur.php";
 require_once "controleurFichierUpload.php";
 require_once "controleurContact.php";
+require_once "controleurModifierFichier.php";
 
 $action = $_GET['action'] ?? "accueil";
 
 switch($action) {
     case 'accueil':
         accueil();
+        break;
+    case 'modifierFichier':
+        modifierFichier();
         break;
     case 'connecter':
         connexion();
