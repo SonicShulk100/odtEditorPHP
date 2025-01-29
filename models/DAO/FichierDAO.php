@@ -31,7 +31,7 @@ class FichierDAO {
      * @param int|null $id l'ID du fichier en quesiton
      * @return array|bool TRUE si il existe, FALSE sinon.
      */
-    public static function getFichierById(?int $id): array|bool{
+    public static function getFichierById(?int $id): array|bool|null|Fichier{
         $db = new PDO(Param::DSN, Param::USER, Param::PASS);
 
         try{
@@ -39,8 +39,21 @@ class FichierDAO {
             $stmt = $db->prepare($SQL);
             $stmt->bindParam(":id", $id);
             $stmt->execute();
-            return $stmt->fetch(PDO::FETCH_ASSOC);
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if($row){
+                return new Fichier(
+                    $row['idFichier'],
+                    $row['nomFichier'],
+                    $row['contenuFichier'],
+                    $row['dateAjout'],
+                    $row['dateMaJ'],
+                    $row['idUtilisateur']
+                );
+            }
+            return null;
         }
+
         catch (PDOException $e){
             die('Erreur : '.$e->getMessage());
         }

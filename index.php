@@ -12,7 +12,8 @@ if(!isset($_SESSION)){
         <title>Editeur de fichier ODT</title>
         <meta charset="UTF-8"/>
         <link rel="stylesheet" href="styles/styles.css"/>
-        <meta http-equiv="content-security-policy" content="default-src 'self' script-src 'self'"/>
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.18/summernote-lite.min.css" rel="stylesheet">
+        <meta http-equiv="content-security-policy" content=""/>
     </head>
     <body>
         <?php require_once "controllers/controleurPrincipal.php";?>
