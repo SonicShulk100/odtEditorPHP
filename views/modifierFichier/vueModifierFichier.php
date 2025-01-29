@@ -1,3 +1,11 @@
+<?php
+$idFichier = $_GET['idFichier'] ?? null;
+
+if ($idFichier) {
+    $fichier = FichierDAO::getFichierById($idFichier);
+}
+?>
+
 <div class="container">
     <nav>
         <?php require_once "views/haut.php"; ?>
@@ -14,7 +22,7 @@
             <label for="contenuFichier">Contenu du fichier :</label>
             <br>
             <script src="https://cdn.ckeditor.com/4.19.1/standard/ckeditor.js"></script>
-            <textarea id="contenuFichier" name="contenuFichier"></textarea>
+            <textarea id="contenuFichier" name="contenuFichier"> <?php echo htmlspecialchars($fichier->getContenu());?></textarea>
             <script>
                 CKEDITOR.replace('contenuFichier');
             </script>

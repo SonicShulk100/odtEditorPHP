@@ -29,7 +29,7 @@ class FichierDAO {
     /**
      * Récupération du fichier en question dans la base de données.
      * @param int|null $id l'ID du fichier en quesiton
-     * @return array|bool TRUE si il existe, FALSE sinon.
+     * @return array|bool|Fichier|null TRUE si il existe, FALSE sinon.
      */
     public static function getFichierById(?int $id): array|bool|null|Fichier{
         $db = new PDO(Param::DSN, Param::USER, Param::PASS);
@@ -87,7 +87,8 @@ class FichierDAO {
                     $row['contenuFichier'],
                     $row['dateAjout'],
                     $row['dateMaJ'],
-                    $row['idUtilisateur']
+                    $row['idUtilisateur'],
+                    $row['fichierBinaire']
                 );
             }
 
@@ -107,7 +108,7 @@ class FichierDAO {
      * @param int|null $idUtilisateur L'ID de l'utilisateur.
      * @return bool TRUE si l'insertion a été fait, FALSE sinon
      */
-    public static function createFichier(?string $nomFichier, ?string $contenu, ?int $idUtilisateur): bool{
+    public static function createFichier(?string $nomFichier, ?string $contenu, ?int $idUtilisateur, $fichierBinaire): bool{
         $db = new PDO(Param::DSN, Param::USER, Param::PASS);
         $db->exec("SET AUTOCOMMIT=0");
         $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -115,7 +116,7 @@ class FichierDAO {
         try{
             $db->beginTransaction();
 
-            $sql = "INSERT INTO fichier (nomFichier, contenuFichier, dateAjout, dateMaJ, idUtilisateur) VALUES (?, ?, current_date, current_date, ?)";
+            $sql = "INSERT INTO fichier (nomFichier, contenuFichier, dateAjout, dateMaJ, idUtilisateur, fichierBinaire) VALUES (?, ?, current_date, current_date, ?, ?)";
 
             //Préparation de la requête SQL
             $stmt = $db->prepare($sql);
@@ -124,6 +125,7 @@ class FichierDAO {
             $stmt->bindParam(1, $nomFichier);
             $stmt->bindParam(2, $contenu);
             $stmt->bindParam(3, $idUtilisateur);
+            $stmt->bindParam(4, $fichierBinaire);
 
             //Exécution
             $stmt->execute();
