@@ -11,7 +11,6 @@
                     <th>Contenu du fichier</th>
                     <th>Date de création</th>
                     <th>Date de mise à Jour</th>
-                    <th>ID de l'utilisateur</th>
                     <th>Action</th>
                 </tr>
             </thead>
@@ -27,7 +26,6 @@
                 echo "<td>" . htmlspecialchars($fichier->getContenu()) . "</td>";
                 echo "<td>" . htmlspecialchars($fichier->getCreatedAt()) . "</td>";
                 echo "<td>" . htmlspecialchars($fichier->getUpdatedAt()) . "</td>";
-                echo "<td>" . htmlspecialchars($fichier->getIdUtilisateur()) . "</td>";
                 echo "<td>
                         <a href='/index.php?action=modifierFichier&id=" . htmlspecialchars($fichier->getId()) . "'>Modifier</a>
                         <a href='/index.php?action=supprimerFichier&id=" . htmlspecialchars($fichier->getId()) . "'>Supprimer</a>

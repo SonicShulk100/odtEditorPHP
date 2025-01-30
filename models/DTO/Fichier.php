@@ -6,8 +6,8 @@ class Fichier{
     private ?string $contenu;
     private DateTime|string|null $createdAt;
     private DateTime|string|null $updatedAt;
-
     private ?int $idUtilisateur;
+    private ?string $fichierBinaire;
 
     /**
      * @param int|null $id
@@ -16,8 +16,9 @@ class Fichier{
      * @param DateTime|string|null $createdAt
      * @param DateTime|string|null $updatedAt
      * @param int|null $idUtilisateur
+     * @param string|null $fichierBinaire
      */
-    public function __construct(?int $id, ?string $nom, ?string $contenu, DateTime|string|null $createdAt, DateTime|string|null $updatedAt, ?int $idUtilisateur)
+    public function __construct(?int $id, ?string $nom, ?string $contenu, DateTime|string|null $createdAt, DateTime|string|null $updatedAt, ?int $idUtilisateur, ?string $fichierBinaire)
     {
         $this->id = $id;
         $this->nom = $nom;
@@ -25,9 +26,10 @@ class Fichier{
         $this->createdAt = $createdAt;
         $this->updatedAt = $updatedAt;
         $this->idUtilisateur = $idUtilisateur;
+        $this->fichierBinaire = $fichierBinaire;
     }
 
-    //Getters => Récupération des données
+    //Getters
 
     public function getId(): ?int
     {
@@ -59,7 +61,12 @@ class Fichier{
         return $this->idUtilisateur;
     }
 
-    //Setters => Modification des données.
+    public function getFichierBinaire(): ?string
+    {
+        return $this->fichierBinaire;
+    }
+
+    //Setters
 
     public function setId(?int $id): void
     {
@@ -76,12 +83,12 @@ class Fichier{
         $this->contenu = $contenu;
     }
 
-    public function setCreatedAt(?DateTime $createdAt): void
+    public function setCreatedAt(DateTime|string|null $createdAt): void
     {
         $this->createdAt = $createdAt;
     }
 
-    public function setUpdatedAt(?DateTime $updatedAt): void
+    public function setUpdatedAt(DateTime|string|null $updatedAt): void
     {
         $this->updatedAt = $updatedAt;
     }
@@ -89,5 +96,10 @@ class Fichier{
     public function setIdUtilisateur(?int $idUtilisateur): void
     {
         $this->idUtilisateur = $idUtilisateur;
+    }
+
+    public function setFichierBinaire(?string $fichierBinaire): void
+    {
+        $this->fichierBinaire = $fichierBinaire;
     }
 }

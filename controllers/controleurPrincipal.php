@@ -6,6 +6,8 @@ require_once "controleurUtilisateur.php";
 require_once "controleurFichierUpload.php";
 require_once "controleurContact.php";
 require_once "controleurModifierFichier.php";
+require_once "controleurAPropos.php";
+require_once "controleurCreerFichier.php";
 
 $action = $_GET['action'] ?? "accueil";
 
@@ -26,7 +28,17 @@ switch($action) {
         utilisateur();
         break;
     case "importer":
-        fichierUpload();
+        try {
+            fichierUpload();
+        } catch (\PhpOffice\PhpWord\Exception\Exception $e) {
+            die($e->getMessage());
+        }
+        break;
+    case "aPropos":
+        aPropos();
+        break;
+    case "créer":
+        creer();
         break;
     case "contact":
         contact();

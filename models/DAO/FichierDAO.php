@@ -48,7 +48,8 @@ class FichierDAO {
                     $row['contenuFichier'],
                     $row['dateAjout'],
                     $row['dateMaJ'],
-                    $row['idUtilisateur']
+                    $row['idUtilisateur'],
+                    $row['fichierBinaire']
                 );
             }
             return null;
