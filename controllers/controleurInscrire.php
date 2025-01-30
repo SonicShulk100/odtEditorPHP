@@ -30,7 +30,7 @@ function inscrire(): void
 
                 //Si l'utilisateur existe bien.
                 if($user){
-                    //Alors on se met dans la page de l'utilisateru créé.
+                    //Alors on se met dans la page de l'utilisateru créé et on sort de la fonction.
                     $_SESSION['idUtilisateur'] = $user['idUtilisateur'] ?? null;
 
                     header('Location: /index.php?action=utilisateur');

@@ -15,7 +15,7 @@ function creer(): void{
 function creerFichier(): void{
 
     //Vérification si la méthode est bien POST
-    if($_SERVER["REQUEST_METHOD"] == "POST"){
+    if($_SERVER["REQUEST_METHOD"] === "POST"){
         //Si on a cliqué sur le bouton enregistrer...
         if(isset($_POST["enregistrer"])){
 
@@ -23,22 +23,21 @@ function creerFichier(): void{
             $nomFichier = $_POST["nomFichier"];
             $contenuFichier = $_POST["editionFichier"];
             $idUtilisateur = $_SESSION["idUtilisateur"] ?? null;
-            $binary = stringToBinary($contenuFichier) ?? null;
+            $binary = stringToBinary($contenuFichier);
 
             //Initialisation de la base de données afin de faire une insertion dans la base de données
             $response = FichierDAO::createFichier($nomFichier, $contenuFichier, $idUtilisateur, $binary);
 
             //Si c'est fait...
             if($response){
-                //Alors on va dans la page de dl'utilisateur.
-                echo "<p>Création faite!</p>";
+                //Alors, on va dans la page de dl'utilisateur.
+                echo "<p>Création faite !</p>";
                 header("location: ../index.php?action=utilisateur");
                 exit();
             }
-            else{
-                //Sinon on affiche une erreur.
-                echo "<p>Erreur!</p>";
-            }
+
+            //Sinon, on affiche une erreur.
+            echo "<p>Erreur !</p>";
         }
         else if(isset($_POST["annuler"])){
             //Sinon, on va vers la page de l'utilisateur.

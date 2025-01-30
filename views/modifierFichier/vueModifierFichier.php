@@ -21,10 +21,15 @@ if ($idFichier) {
 
             <label for="contenuFichier">Contenu du fichier :</label>
             <br>
-            <script src="https://cdn.ckeditor.com/4.19.1/standard/ckeditor.js"></script>
             <textarea id="contenuFichier" name="contenuFichier"> <?php echo htmlspecialchars($fichier->getContenu());?></textarea>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/2.26.0/trumbowyg.min.js"></script>
             <script>
-                CKEDITOR.replace('contenuFichier');
+                $(document).ready(
+                    function () {
+                        $('#contenuFichier').trumbowyg();
+                    }
+                );
             </script>
             <br>
             <button type="submit" class="button">Enregistrer les modifications</button>

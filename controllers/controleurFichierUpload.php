@@ -6,7 +6,7 @@ require_once 'models/DAO/FichierDAO.php';
 
 require 'vendor/autoload.php'; // Assurer que PhpOffice est bien inclus
 
-if(session_status() == PHP_SESSION_NONE){
+if(session_status() === PHP_SESSION_NONE){
     session_start();
 }
 
@@ -41,9 +41,9 @@ function fichierUpload(): void {
             // Redirection après succès
             header("Location: index.php?action=utilisateur");
             exit();
-        } else {
-            echo "<p>Erreur lors de l'upload du fichier.</p>";
         }
+
+        echo "<p>Erreur lors de l'upload du fichier.</p>";
 
     }
 
@@ -51,12 +51,11 @@ function fichierUpload(): void {
 }
 
 function extractOdtContent($filePath) {
-    // Vérification de l'existence du fichier
     if (!file_exists($filePath)) {
         die("Erreur : fichier introuvable !");
     }
 
-    // Ouvrir le fichier ODT comme une archive ZIP
+    // Ouvrir le fichier ODT comme un ZIP
     $zip = new ZipArchive();
     if ($zip->open($filePath) !== true) {
         die("Erreur : Impossible d'ouvrir le fichier ODT !");
@@ -71,7 +70,7 @@ function extractOdtContent($filePath) {
     // Lire et extraire les images
     $imageMapping = extractOdtImages($zip, 'uploads/images/');
 
-    // Transformer le XML en HTML
+    // Transformer le XML en HTML avec styles et images
     $htmlContent = convertOdtXmlToHtml($contentXml, $imageMapping);
 
     // Fermer l'archive ZIP
@@ -88,8 +87,8 @@ function extractOdtImages(ZipArchive $zip, string $outputDir): array {
     $imageMapping = [];
 
     // Vérifier et créer le dossier cible si nécessaire
-    if (!is_dir($outputDir)) {
-        mkdir($outputDir, 0777, true);
+    if (!is_dir($outputDir) && !mkdir($outputDir, 0777, true) && !is_dir($outputDir)) {
+        throw new RuntimeException(sprintf('Directory "%s" was not created', $outputDir));
     }
 
     // Parcourir les fichiers ZIP et extraire les images
@@ -110,7 +109,7 @@ function extractOdtImages(ZipArchive $zip, string $outputDir): array {
 }
 
 /**
- * Convertit le fichier content.xml en HTML tout en remplaçant les images.
+ * Convertit le fichier content.xml en HTML tout en remplaçant les images et conservant les styles.
  */
 function convertOdtXmlToHtml(string $contentXml, array $imageMapping): string {
     $dom = new DOMDocument();
@@ -122,12 +121,13 @@ function convertOdtXmlToHtml(string $contentXml, array $imageMapping): string {
 
     $html = "<div>";
 
-    // Extraction des paragraphes (<text:p>)
+    // Extraction des paragraphes avec styles
     foreach ($xpath->query("//text:p") as $paragraph) {
-        $html .= "<p>" . htmlentities($paragraph->textContent) . "</p>";
+        $style = $paragraph->getAttribute("text:style-name");
+        $html .= "<p style='font-style:italic;'>" . htmlentities($paragraph->textContent) . "</p>";
     }
 
-    // Extraction des images (<draw:image>)
+    // Extraction des images
     foreach ($xpath->query("//draw:image") as $image) {
         $xlinkHref = $image->getAttribute("xlink:href");
         if (isset($imageMapping[$xlinkHref])) {
@@ -135,7 +135,7 @@ function convertOdtXmlToHtml(string $contentXml, array $imageMapping): string {
         }
     }
 
-    // Extraction des tableaux (<table:table>)
+    // Extraction des tableaux
     foreach ($xpath->query("//table:table") as $table) {
         $html .= "<table border='1'>";
         foreach ($xpath->query(".//table:table-row", $table) as $row) {

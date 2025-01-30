@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="JavaScriptLibraryMappings">
-    <file url="PROJECT" libraries="{ckeditor, ckeditor5.umd, summernote}" />
+    <file url="PROJECT" libraries="{Trumbowyg, ckeditor, ckeditor5.umd, jquery, quill, quill.snow, summernote, trumbowyg, trumbowyg.base64, trumbowyg.colors}" />
   </component>
 </project>

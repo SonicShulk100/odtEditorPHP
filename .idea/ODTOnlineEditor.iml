@@ -11,5 +11,12 @@
     <orderEntry type="library" name="ckeditor" level="application" />
     <orderEntry type="library" name="ckeditor5.umd" level="application" />
     <orderEntry type="library" name="summernote" level="application" />
+    <orderEntry type="library" name="quill" level="application" />
+    <orderEntry type="library" name="quill.snow" level="application" />
+    <orderEntry type="library" name="Trumbowyg" level="application" />
+    <orderEntry type="library" name="jquery" level="application" />
+    <orderEntry type="library" name="trumbowyg" level="application" />
+    <orderEntry type="library" name="trumbowyg.base64" level="application" />
+    <orderEntry type="library" name="trumbowyg.colors" level="application" />
   </component>
 </module>
