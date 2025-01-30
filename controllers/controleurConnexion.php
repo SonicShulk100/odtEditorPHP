@@ -1,7 +1,5 @@
 <?php
 
-use JetBrains\PhpStorm\NoReturn;
-
 require_once "models/Param.php";
 
 if(session_status() == PHP_SESSION_NONE){
@@ -10,7 +8,8 @@ if(session_status() == PHP_SESSION_NONE){
 
 /**
  * Contrôleur entière de la connexion
- * @return void Le contrôleur ici gère la connexion dans le site.
+ * @return void Le contrôleur ici gère la connexion dans le site. Le contrôleur est
+ * sous-obligation de ne rien retourner.
  */
 function connexion(): void
 {
@@ -37,9 +36,9 @@ function connexion(): void
 
 /**
  * Contrôleur pour déconnecter l'utilisateur.
- * @return void
+ * @return void Comme le contrôleur qui gère la connexion, le contrôleur qui gère la connexion est
+ * sous-obligation den e rien retourner
  */
-#[NoReturn]
 function deconnexion(): void
 {
     session_start(); // Assurez-vous que la session est démarrée
@@ -54,4 +53,3 @@ function deconnexion(): void
     header('Location: index.php?action=connecter');
     exit();
 }
-

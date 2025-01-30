@@ -26,7 +26,9 @@ if ($idFichier) {
             <script>
                 CKEDITOR.replace('contenuFichier');
             </script>
+            <br>
             <button type="submit" class="button">Enregistrer les modifications</button>
+            <button type="submit" class="button">Annuler</button>
         </form>
     </section>
     <?php require_once "views/bas.php"; ?>

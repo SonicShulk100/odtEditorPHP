@@ -34,15 +34,22 @@ switch($action) {
             die($e->getMessage());
         }
         break;
+    case "enregistrerModification":
+        enregistrerModification();
+        break;
     case "aPropos":
         aPropos();
         break;
     case "créer":
         creer();
         break;
+    case "creerFichier":
+        creerFichier();
+        break;
     case "contact":
         contact();
         break;
     case 'deconnexion':
         deconnexion();
+        break;
 }

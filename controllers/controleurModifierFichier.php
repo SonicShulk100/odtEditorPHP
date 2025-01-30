@@ -24,3 +24,22 @@ function modifierFichier(): void{
 
     include "views/modifierFichier/vueModifierFichier.php";
 }
+
+function enregistrerModification(): void{
+    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+        $idFichier = (int)$_POST['id'];
+        $nomFichier = $_POST['nomFichier'];
+        $contenuFichier = $_POST['contenuFichier'];
+        $idUtilisateur = (int)$_POST['idUtilisateur'];
+
+        $response = FichierDAO::updateFichier($idFichier, $nomFichier, $contenuFichier, $idUtilisateur);
+
+        if($response){
+            header("location: index.php?action=utilisateur");
+            exit();
+        }
+        else{
+            echo "<p>Erreur : Fichier inexistant.</p>";
+        }
+    }
+}
