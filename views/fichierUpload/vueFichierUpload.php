@@ -8,7 +8,7 @@
             <input type="file" id="fileUpload" name="fileUpload" accept=".odt" required/>
             <br>
             <input type="hidden" value="<?php echo $_SESSION['csrfToken']; ?>"/>
-            <input type="submit" value="Importer" id="uploaded"/>
+            <input type="submit" class="button" value="Importer" id="uploaded"/>
         </form>
     </section>
     <?php require_once 'views/bas.php'; ?>
