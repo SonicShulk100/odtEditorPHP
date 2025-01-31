@@ -3,7 +3,7 @@
         <?php require_once "views/haut.php"; ?>
     </nav>
     <section>
-        Je suis sur la page accueil.
+        <h2>Accueil : </h2>
     </section>
     <?php require_once "views/bas.php"; ?>
 </div>

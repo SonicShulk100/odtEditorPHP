@@ -26,7 +26,7 @@ function modifierFichier(): void{
 }
 
 function enregistrerModification(): void{
-    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $idFichier = (int)$_POST['id'];
         $nomFichier = $_POST['nomFichier'];
         $contenuFichier = $_POST['contenuFichier'];

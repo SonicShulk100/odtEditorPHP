@@ -23,7 +23,7 @@ if (!isset($_SESSION['csrfToken'])) {
             <input type="password" id="password" name="password" required />
             <br>
             <input type="hidden" name="csrfToken" value="<?php echo $_SESSION['csrfToken']; ?>" />
-            <input type="submit" value="Connecter" />
+            <input type="submit" value="Connecter" class="button"/>
         </form>
     </section>
     <?php require_once "views/bas.php"; ?>

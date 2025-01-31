@@ -29,7 +29,7 @@ if (!isset($_SESSION['csrfToken'])){
 
             <br>
 
-            <label for="login">Login (Juste insérez votre mail) : </label>
+            <label for="login">Login (Juste, insérez votre mail) : </label>
             <input type="text" id="login" name="login" required/>
 
             <br>
@@ -40,7 +40,7 @@ if (!isset($_SESSION['csrfToken'])){
             <br>
 
             <input type="hidden" value="<?php echo $_SESSION['csrfToken'];?>"/>
-            <input type="submit" value="Inscrire"/>
+            <input type="submit" value="Inscrire" class="button"/>
         </form>
         <?php if(isset($error)): ?>
             <p style="color:red;"><?php echo $error; ?></p>

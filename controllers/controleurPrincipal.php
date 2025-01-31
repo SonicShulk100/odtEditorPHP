@@ -8,6 +8,7 @@ require_once "controleurContact.php";
 require_once "controleurModifierFichier.php";
 require_once "controleurAPropos.php";
 require_once "controleurCreerFichier.php";
+require_once "controleurSupprimerFichier.php";
 
 $action = $_GET['action'] ?? "accueil";
 
@@ -28,11 +29,7 @@ switch($action) {
         utilisateur();
         break;
     case "importer":
-        try {
-            fichierUpload();
-        } catch (\PhpOffice\PhpWord\Exception\Exception $e) {
-            die($e->getMessage());
-        }
+        fichierUpload();
         break;
     case "enregistrerModification":
         enregistrerModification();
@@ -51,5 +48,11 @@ switch($action) {
         break;
     case 'deconnexion':
         deconnexion();
+        break;
+    case "supprimerFichier":
+        supprimerFichier();
+        break;
+    case "supprimerFichier1":
+        supprimerFichier1();
         break;
 }

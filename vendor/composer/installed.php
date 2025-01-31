@@ -3,7 +3,7 @@
         'name' => '__root__',
         'pretty_version' => 'dev-master',
         'version' => 'dev-master',
-        'reference' => 'ae8bf7105dc76486bc383e07f4367877c7804d15',
+        'reference' => '3df5a4912168f9cb403299e6580be4e28f893628',
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -13,7 +13,7 @@
         '__root__' => array(
             'pretty_version' => 'dev-master',
             'version' => 'dev-master',
-            'reference' => 'ae8bf7105dc76486bc383e07f4367877c7804d15',
+            'reference' => '3df5a4912168f9cb403299e6580be4e28f893628',
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
@@ -36,6 +36,17 @@
             'install_path' => __DIR__ . '/../phpoffice/phpword',
             'aliases' => array(),
             'dev_requirement' => false,
+        ),
+        'roave/security-advisories' => array(
+            'pretty_version' => 'dev-latest',
+            'version' => 'dev-latest',
+            'reference' => 'b6841f6613aeea6dbf722ac1663e6409653873d5',
+            'type' => 'metapackage',
+            'install_path' => null,
+            'aliases' => array(
+                0 => '9999999-dev',
+            ),
+            'dev_requirement' => true,
         ),
     ),
 );

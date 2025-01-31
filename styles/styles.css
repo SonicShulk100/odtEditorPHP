@@ -18,6 +18,7 @@ footer{
 #tableFichiersODTUtilisateur{
     border-width: thick;
     border-color: black;
+    font-family: "Consolas", "Courier", "Courier New", monospace;
 }
 
 body{
@@ -56,4 +57,17 @@ a:hover{
 #tableFichiersODTUtilisateur a:hover{
     text-decoration: none;
     color: bisque;
+}
+
+h2{
+    text-align: center;
+    font-family: "Consolas", "Courier", "Courier New", monospace;
+    text-decoration: underline;
+    color: bisque;
+}
+
+.paragraph{
+    font-family: "Consolas", "Courier", "Courier New", monospace;
+    text-decoration: none;
+    color: azure;
 }

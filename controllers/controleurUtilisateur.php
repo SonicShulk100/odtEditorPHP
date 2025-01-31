@@ -1,7 +1,7 @@
 <?php
 /**
  * Controleur de la page de l'utilisateur.
- * @return void
+ * @return void le contrôleur est sous-obligation de ne pas retourner quelque chose.
  */
 function utilisateur(): void
 {
@@ -19,8 +19,7 @@ function utilisateur(): void
  */
 function estConnecte(): bool
 {
-    return session_status() === PHP_SESSION_ACTIVE &&
-        isset($_SESSION['idUtilisateur']) &&
-        isset($_SESSION['connecte']) &&
-        $_SESSION['connecte'] === true;
+    return isset($_SESSION['idUtilisateur'], $_SESSION['connecte'])
+        && session_status() === PHP_SESSION_ACTIVE
+        && $_SESSION['connecte'] === true;
 }
