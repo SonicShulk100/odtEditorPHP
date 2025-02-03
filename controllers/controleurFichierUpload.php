@@ -6,7 +6,6 @@ ini_set('display_errors', 1);
 
 //Importations des fichiers PHP nécessaires.
 require_once 'models/DAO/FichierDAO.php';
-require 'vendor/autoload.php';
 
 //Importations des Handlers
 require_once "utils/HTML/FontHandler.php";
@@ -88,6 +87,7 @@ function convertOdtToHtmlSimplified(string $odtPath): string {
         throw new RuntimeException("Impossible d'ouvrir le fichier ODT");
     }
 
+    // Extraction du XML complet
     $contentXml = $zip->getFromName('content.xml');
     if (!$contentXml) {
         throw new RuntimeException("Impossible de charger le fichier XML");
@@ -101,7 +101,7 @@ function convertOdtToHtmlSimplified(string $odtPath): string {
     $pageLayoutHandler = new PageLayoutHandler();
     $titleHandler = new TitleHandler();
     $fontHandler = new FontHandler();
-    $globalHandler = new GlobalXMLHandler();
+    $globalHandler = new GlobalXMLHandler(); // 🔹 Ajout du handler global
 
     // Définition de l'ordre de la chaîne de responsabilité
     $textHandler->setNextHandler($listHandler);
@@ -110,7 +110,7 @@ function convertOdtToHtmlSimplified(string $odtPath): string {
     $imageHandler->setNextHandler($pageLayoutHandler);
     $pageLayoutHandler->setNextHandler($titleHandler);
     $titleHandler->setNextHandler($fontHandler);
-    $fontHandler->setNextHandler($globalHandler);
+    $fontHandler->setNextHandler($globalHandler); // 🔹 Ajout du Global Handler en dernier
 
     // Exécution de la chaîne de responsabilité
     $htmlContent = $textHandler->handle($contentXml);

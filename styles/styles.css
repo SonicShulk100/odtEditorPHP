@@ -71,3 +71,7 @@ h2{
     text-decoration: none;
     color: azure;
 }
+
+.paragraph p{
+    font-size: 35px;
+}
