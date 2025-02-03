@@ -8,6 +8,16 @@ ini_set('display_errors', 1);
 require_once 'models/DAO/FichierDAO.php';
 require 'vendor/autoload.php';
 
+//Importations des Handlers
+require_once "utils/HTML/FontHandler.php";
+require_once "utils/HTML/GlobalXMLHandler.php";
+require_once "utils/HTML/ImageHandler.php";
+require_once "utils/HTML/ListHandler.php";
+require_once "utils/HTML/PageLayoutHandler.php";
+require_once "utils/HTML/TableHandler.php";
+require_once "utils/HTML/TextFormattingHandler.php";
+require_once "utils/HTML/TitleHandler.php";
+
 //Vérification de l'existence de la session ↔ S'il n'existe pas de session...
 if (session_status() === PHP_SESSION_NONE) {
     //Alors, on en crée une.
@@ -68,7 +78,7 @@ function fichierUpload(): void {
 }
 
 /**
- * Ici, on fait une simplification de la conversion ODT ves HTML.
+ * Ici, on fait une simplification de la conversion ODT vers HTML.
  * @param $odtPath string fichier ODT.
  * @return string le fichier ODT converti en HTML
  */
@@ -78,109 +88,33 @@ function convertOdtToHtmlSimplified(string $odtPath): string {
         throw new RuntimeException("Impossible d'ouvrir le fichier ODT");
     }
 
-    // Extraction des fichiers XML nécessaires
-    $contentXml = simplexml_load_string($zip->getFromName('content.xml'));
-    $stylesXml = simplexml_load_string($zip->getFromName('styles.xml'));
-
-    //Si on n'a pas les deux fichiers XML
-    if (!$contentXml || !$stylesXml) {
-        throw new RuntimeException("Impossible de charger les fichiers XML");
+    $contentXml = $zip->getFromName('content.xml');
+    if (!$contentXml) {
+        throw new RuntimeException("Impossible de charger le fichier XML");
     }
 
-    // Espaces de noms
-    $namespaces = $contentXml->getNamespaces(true);
+    // Création des handlers
+    $textHandler = new TextFormattingHandler();
+    $listHandler = new ListHandler();
+    $tableHandler = new TableHandler();
+    $imageHandler = new ImageHandler($zip); // 🔹 Ajout du ZIP à ImageHandler
+    $pageLayoutHandler = new PageLayoutHandler();
+    $titleHandler = new TitleHandler();
+    $fontHandler = new FontHandler();
+    $globalHandler = new GlobalXMLHandler();
 
-    // Mapping des styles
-    $stylesMap = [];
-    foreach ($stylesXml->xpath('//style:style') as $style) {
-        $name = (string) $style['name'];
+    // Définition de l'ordre de la chaîne de responsabilité
+    $textHandler->setNextHandler($listHandler);
+    $listHandler->setNextHandler($tableHandler);
+    $tableHandler->setNextHandler($imageHandler);
+    $imageHandler->setNextHandler($pageLayoutHandler);
+    $pageLayoutHandler->setNextHandler($titleHandler);
+    $titleHandler->setNextHandler($fontHandler);
+    $fontHandler->setNextHandler($globalHandler);
 
-        $Weight = $style->xpath('.//style:text-properties/@fo:font-weight');
-        $Size = $style->xpath('.//style:text-properties/@fo:font-size');
-        $Color = $style->xpath('.//style:text-properties/@fo:color');
-        $Textalign = $style->xpath('.//style:paragraph-properties/@fo:text-align');
+    // Exécution de la chaîne de responsabilité
+    $htmlContent = $textHandler->handle($contentXml);
 
-        $stylesMap[$name] = [
-            'font-weight' => ($val = reset($Weight)) ? (string) $val : '',
-            'font-size'   => ($val = reset($Size)) ? (string) $val : '',
-            'color'       => ($val = reset($Color)) ? (string) $val : '',
-            'text-align'  => ($val = reset($Textalign)) ? (string) $val : ''
-        ];
-    }
-
-    // Traitement du contenu principal
-    $html = '<div class="odt-content">';
-
-    foreach ($contentXml->xpath('//text:p | //text:h | //draw:frame') as $node) {
-        $nodeName = $node->getName();
-        $styleName = (string) $node['text:style-name'];
-        $styleAttr = generateStyleAttribute($stylesMap, $styleName);
-
-        if ($nodeName === 'h') {
-            $level = (int) $node['text:outline-level'] ?: 1;
-            $html .= "<h{$level} style='{$styleAttr}'>" . htmlspecialchars((string) $node) . "</h{$level}>";
-        } elseif ($nodeName === 'p') {
-            $html .= "<p style='{$styleAttr}'>" . htmlspecialchars((string) $node) . "</p>";
-        } elseif ($nodeName === 'frame') {
-            // Extraction des images
-            $image = $node->children($namespaces['draw'])->image;
-            if ($image) {
-                $href = (string) $image->attributes($namespaces['xlink'])['href'];
-                if (str_starts_with($href, 'Pictures/')) {
-                    $imagePath = saveImageFromZip($zip, $href);
-                    $html .= "<img src='{$imagePath}' alt='Image ODT' style='max-width:100%;'/>";
-                }
-            }
-        }
-    }
-
-    //On ferme le premier <div>
-    $html .= '</div>';
     $zip->close();
-    return $html;
-}
-
-/**
- * Génère les attributs CSS en fonction des styles extraits
- */
-function generateStyleAttribute(array $styles, string $styleName): string {
-    if (!isset($styles[$styleName])) {
-        return '';
-    }
-
-    $css = [];
-    foreach ($styles[$styleName] as $property => $value) {
-        if (!empty($value)) {
-            $css[] = "{$property}: {$value}";
-        }
-    }
-
-    return implode('; ', $css);
-}
-
-/**
- * Sauvegarde une image extraite d'un fichier ODT
- * @param ZipArchive $zip le gérant.
- * @param string $fileName le nom du fichier ODT.
- * @return string le nouveau chemin du fichier.
- */
-function saveImageFromZip(ZipArchive $zip, string $fileName): string {
-    $outputDir = 'uploads/images/';
-    if (!is_dir($outputDir) && !mkdir($outputDir, 0777, true) && !is_dir($outputDir)) {
-        throw new RuntimeException(sprintf('Directory "%s" was not created', $outputDir));
-    }
-
-    $imageContent = $zip->getFromName($fileName);
-    if (!$imageContent) {
-        return '';
-    }
-
-    $newFileName = uniqid('img_', true) . '_' . basename($fileName);
-    $newFilePath = $outputDir . $newFileName;
-
-    if (file_put_contents($newFilePath, $imageContent) === false) {
-        return '';
-    }
-
-    return $newFilePath;
+    return $htmlContent;
 }
