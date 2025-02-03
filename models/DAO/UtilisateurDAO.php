@@ -28,6 +28,22 @@ class UtilisateurDAO {
         }
     }
 
+    public static function getUtilisateurById(?int $idUtilisateur): array{
+        $db = new PDO(Param::DSN, Param::USER, Param::PASS);
+
+        try{
+            $SQL = "SELECT nom, prenom FROM utilisateur WHERE idUtilisateur = ?";
+
+            $stmt = $db->prepare($SQL);
+            $stmt->execute([$idUtilisateur]);
+
+            return $stmt->fetch(PDO::FETCH_ASSOC);
+        }
+        catch(PDOException $e){
+            die('Erreur : '.$e->getMessage());
+        }
+    }
+
     /**
      * Vérification en cas de connexion.
      * @param string|null $login le login(en email)

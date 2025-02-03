@@ -1,17 +1,15 @@
 <?php
 
+require_once "utils/XMLHandler.php";
+
 class TableHandler extends XMLHandler
 {
     protected function process(string $xml): string
     {
-        // Transformation des tableaux ODT en HTML
-        $xml = preg_replace('/<table:table[^>]*>/', '<table>', $xml);
-        $xml = preg_replace('/<table:table-row[^>]*>/', '<tr>', $xml);
-        $xml = preg_replace('/<table:table-cell[^>]*>/', '<td>', $xml);
-        $xml = preg_replace('/<\/table:table-cell>/', '</td>', $xml);
-        $xml = preg_replace('/<\/table:table-row>/', '</tr>', $xml);
-        $xml = preg_replace('/<\/table:table>/', '</table>', $xml);
-
+        // Traitement des tableaux
+        $xml = preg_replace('/<table:table table:name="([^"]+)">(.+?)<\/table:table>/', '<table class="$1">$2</table>', $xml);
+        $xml = preg_replace('/<table:table-row>(.+?)<\/table:table-row>/', '<tr>$1</tr>', $xml);
+        $xml = preg_replace('/<table:table-cell>(.+?)<\/table:table-cell>/', '<td>$1</td>', $xml);
         return $xml;
     }
 }

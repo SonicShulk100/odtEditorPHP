@@ -7,6 +7,7 @@ class TitleHandler extends XMLHandler
 {
     protected function process(string $xml): string
     {
-        return preg_replace('/<text:h text:outline-level="([0-9])">(.+?)<\/text:h>/', '<h$1>$2</h$1>', $xml);
+        // Traitement des titres
+        return preg_replace('/<text:h text:style-name="([^"]+)" text:outline-level="(\d+)">(.+?)<\/text:h>/', '<h$2 class="$1">$3</h$2>', $xml);
     }
 }

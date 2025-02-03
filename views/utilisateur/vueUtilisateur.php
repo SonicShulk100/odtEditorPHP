@@ -3,6 +3,7 @@
         <?php require_once "views/haut.php"; ?>
     </nav>
     <section>
+        <h2>Utilisateur : <?php UtilisateurDAO::getUtilisateurById((int)$_SESSION['idUtilisateur']);?></h2>
         <table id="tableFichiersODTUtilisateur" border="3">
             <thead>
                 <tr>
