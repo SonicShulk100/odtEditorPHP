@@ -1,13 +1,31 @@
 <?php
 
-require_once "utils/XMLHandler.php";
+class ParagraphHandler extends Handler{
+    public function handle(XMLReader $request): ?string{
+        if($request->nodeType === XMLReader::ELEMENT &&
+            $request->name === "text:p"){
 
-class ParagraphHandler extends XMLHandler
-{
-    protected function process(string $xml): string
-    {
-        // Traitement des paragraphes
-        $xml = preg_replace('/<text:p text:style-name="([^"]+)">(.+?)<\/text:p>/', '<p class="$1">$2</p>', $xml);
-        return $xml;
+            $styleName = $request->getAttribute("text:style-name");
+            $text = $request->readString();
+
+            $styleAttributes = $this->getStyleAttributes($styleName);
+
+            return "<p " . $this->buildStyleAttributes($styleAttributes) . ">".htmlspecialchars($text)."</p>";
+        }
+
+        return parent::handle($request);
+    }
+
+    private function getStyleAttributes(string $styleName): array {
+        // Implementation to retrieve style attributes from ODT styles.xml
+        return [];
+    }
+
+    private function buildStyleAttributes(array $attributes): string {
+        $styles = [];
+        foreach ($attributes as $property => $value) {
+            $styles[] = "$property: $value";
+        }
+        return count($styles) ? 'style="' . implode('; ', $styles) . '"' : '';
     }
 }

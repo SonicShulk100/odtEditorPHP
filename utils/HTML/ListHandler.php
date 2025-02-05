@@ -1,14 +1,52 @@
 <?php
 
-require_once "utils/XMLHandler.php";
-
-class ListHandler extends XMLHandler
-{
-    protected function process(string $xml): string
+class ListHandler extends Handler{
+    public function handle(XMLReader $request)
     {
-        // Traitement des listes non-ordonnées et ordonnées
-        $xml = preg_replace('/<text:list text:style-name="([^"]+)">(.+?)<\/text:list>/', '<ul class="$1">$2</ul>', $xml);
-        $xml = preg_replace('/<text:list-item>(.+?)<\/text:list-item>/', '<li>$1</li>', $xml);
-        return $xml;
+        if($request->nodeType === XMLReader::ELEMENT &&
+            ($request->name === "text:list" ||
+                $request->name === "text:list-item")){
+            $listType = $this->determineListType($request);
+
+            $htmlContent = [];
+
+            if($listType === 'ordered'){
+                $htmlContent[] = "<ol>";
+            }
+            else{
+                $htmlContent[] = "<ul>";
+            }
+
+            while ($request->next() &&
+                ($request->name !== 'text:list' ||
+                    $request->nodeType !== XMLReader::END_ELEMENT)) {
+                if($request->name === "text:list-item"){
+                    $htmlContent[] = "<li>".$this->processListItem($request)."</li>";
+                }
+            }
+
+            $htmlContent = $listType === 'ordered' ? array_merge($htmlContent, ["</ol>"]) : array_merge($htmlContent, ["</ul>"]);
+            return implode("\n", $htmlContent);
+        }
+        return parent::handle($request);
+    }
+
+    private function determineListType(XMLReader $reader): string {
+        $parent = $reader->lookupNamespace('text');
+        $listStyleName = $reader->getAttribute('text:style-name');
+        // Determine if ordered or unordered based on style name
+        return str_contains($listStyleName, 'OL') ? 'ordered' : 'unordered';
+    }
+
+    private function processListItem(XMLReader $reader): string {
+        $itemContent = '';
+        while ($reader->next() &&
+            ($reader->name !== 'text:list-item' ||
+                $reader->nodeType !== XMLReader::END_ELEMENT)) {
+            if ($reader->nodeType === XMLReader::TEXT) {
+                $itemContent .= htmlspecialchars($reader->value);
+            }
+        }
+        return $itemContent;
     }
 }
