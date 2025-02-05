@@ -1,52 +1,19 @@
 <?php
 
-class ListHandler extends Handler{
-    public function handle(XMLReader $request)
+require_once "utils/AbstractHandler.php";
+
+class ListHandler extends AbstractHandler
+{
+    public function handle(string $xml): string
     {
-        if($request->nodeType === XMLReader::ELEMENT &&
-            ($request->name === "text:list" ||
-                $request->name === "text:list-item")){
-            $listType = $this->determineListType($request);
+        // Identify ordered vs unordered lists based on attributes
+        $xml = preg_replace('/<text:list text:style-name=".*numbered.*">/', '<ol>', $xml);
+        $xml = preg_replace('/<text:list(?! text:style-name=".*numbered.*")>/', '<ul>', $xml);
 
-            $htmlContent = [];
+        // Convert list items
+        // Close list tags
+        $xml = str_replace(array('<text:list-item>', '</text:list-item>', '</text:list>', '</text:list>'), array('<li>', '</li>', '</ul>', '</ol>'), $xml);
 
-            if($listType === 'ordered'){
-                $htmlContent[] = "<ol>";
-            }
-            else{
-                $htmlContent[] = "<ul>";
-            }
-
-            while ($request->next() &&
-                ($request->name !== 'text:list' ||
-                    $request->nodeType !== XMLReader::END_ELEMENT)) {
-                if($request->name === "text:list-item"){
-                    $htmlContent[] = "<li>".$this->processListItem($request)."</li>";
-                }
-            }
-
-            $htmlContent = $listType === 'ordered' ? array_merge($htmlContent, ["</ol>"]) : array_merge($htmlContent, ["</ul>"]);
-            return implode("\n", $htmlContent);
-        }
-        return parent::handle($request);
-    }
-
-    private function determineListType(XMLReader $reader): string {
-        $parent = $reader->lookupNamespace('text');
-        $listStyleName = $reader->getAttribute('text:style-name');
-        // Determine if ordered or unordered based on style name
-        return str_contains($listStyleName, 'OL') ? 'ordered' : 'unordered';
-    }
-
-    private function processListItem(XMLReader $reader): string {
-        $itemContent = '';
-        while ($reader->next() &&
-            ($reader->name !== 'text:list-item' ||
-                $reader->nodeType !== XMLReader::END_ELEMENT)) {
-            if ($reader->nodeType === XMLReader::TEXT) {
-                $itemContent .= htmlspecialchars($reader->value);
-            }
-        }
-        return $itemContent;
+        return parent::handle($xml);
     }
 }

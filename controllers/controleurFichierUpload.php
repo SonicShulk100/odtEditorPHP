@@ -40,8 +40,8 @@ function fichierUpload(): void {
             // On fait un Try-Catch pour gérer les erreurs.
             try{
                 // On récupère le contenu HTML à partir du fichier temporaire, et le fichier binaire.
-                $converter = new ODTToHTMLConverter($fichierTemp);
-                $contenuHTML = $converter->convert();
+                $converter = new ODTToHTMLConverter();
+                $contenuHTML = $converter->convert($fichierTemp);
                 $fichierBinaire = file_get_contents($fichierTemp);
 
                 // On crée une occurrence basée sur le nom du fichier, l'ID de l'utilisateur, le contenu HTML et le fichier binaire.
