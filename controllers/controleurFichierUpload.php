@@ -36,6 +36,7 @@ function fichierUpload(): void {
         $fichierTemp = $_FILES["fileUpload"]["tmp_name"];
         $diUtilisateur = $_SESSION["idUtilisateur"];
 
+        //Si le fichier temporaire existe...
         if ($fichierTemp){
             // On fait un Try-Catch pour gérer les erreurs.
             try{

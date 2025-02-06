@@ -1,29 +1,26 @@
 <?php
 
-require_once "utils/AbstractHandler.php";
+require_once 'utils/Handler.php';
 
-class StyleHandler extends AbstractHandler
-{
-    /**
-     * Convert ODT styles to HTML
-     * @param string $xml ODT XML
-     * @return string HTML
-     */
-    public function handle(string $xml): string
-    {
-        // Extract margins from styles (assuming ODT structure includes them)
-        preg_match('/<style:page-layout-properties fo:margin-left="([\d.]+cm)" fo:margin-right="([\d.]+cm)" fo:margin-top="([\d.]+cm)" fo:margin-bottom="([\d.]+cm)"/', $xml, $matches);
+class StyleHandler extends Handler {
+    public function handle($content, $zip, &$images) {
+        // Handle style conversion
+        // Convert styles (bold, italic, underline, center, left, right) from the ODT content to HTML
+        $patterns = [
+            '/<text:span[^>]+text:style-name="[^"]*bold[^"]*"[^>]*>(.*?)<\/text:span>/' => '<strong>$1</strong>',
+            '/<text:span[^>]+text:style-name="[^"]*italic[^"]*"[^>]*>(.*?)<\/text:span>/' => '<em>$1</em>',
+            '/<text:span[^>]+text:style-name="[^"]*underline[^"]*"[^>]*>(.*?)<\/text:span>/' => '<u>$1</u>',
+            '/<text:p[^>]+text:align="center"[^>]*>(.*?)<\/text:p>/' => '<p style="text-align:center;">$1</p>',
+            '/<text:p[^>]+text:align="left"[^>]*>(.*?)<\/text:p>/' => '<p style="text-align:left;">$1</p>',
+            '/<text:p[^>]+text:align="right"[^>]*>(.*?)<\/text:p>/' => '<p style="text-align:right;">$1</p>',
+        ];
 
-        if ($matches) {
-            $cssMargins = "margin: $matches[3] $matches[1] $matches[4] $matches[2];";
-            $xml = "<div style='$cssMargins'>$xml</div>";
+        // Apply each pattern to the content
+        foreach ($patterns as $pattern => $replacement) {
+            $content = preg_replace($pattern, $replacement, $content);
         }
 
-        // Convert inline styles (bold, italic, font size)
-        $xml = preg_replace('/<text:span fo:font-weight="bold">(.*?)<\/text:span>/', '<strong>$1</strong>', $xml);
-        $xml = preg_replace('/<text:span fo:font-style="italic">(.*?)<\/text:span>/', '<em>$1</em>', $xml);
-        $xml = preg_replace('/<text:span fo:font-size="([\d.]+pt)">(.*?)<\/text:span>/', '<span style="font-size:$1;">$2</span>', $xml);
-
-        return parent::handle($xml);
+        //Appel de la méthode handle de la classe mère.
+        return parent::handle($content, $zip, $images) ?? $content;
     }
 }

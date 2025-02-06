@@ -1,19 +1,16 @@
 <?php
 
-require_once "utils/AbstractHandler.php";
+require_once 'utils/Handler.php';
 
-class ListHandler extends AbstractHandler
-{
-    public function handle(string $xml): string
-    {
-        // Identify ordered vs unordered lists based on attributes
-        $xml = preg_replace('/<text:list text:style-name=".*numbered.*">/', '<ol>', $xml);
-        $xml = preg_replace('/<text:list(?! text:style-name=".*numbered.*")>/', '<ul>', $xml);
+class ListHandler extends Handler {
+    public function handle($content, $zip, &$images) {
+        // Handle list conversion
+        // Convert lists (unordered and ordered) and their sublist from the ODT content to HTML
+        $content = preg_replace('/<text:list[^>]*>(.*?)<\/text:list>/', '<ul>$1</ul>', $content);
+        $content = preg_replace('/<text:list-item[^>]*>(.*?)<\/text:list-item>/', '<li>$1</li>', $content);
+        $content = preg_replace('/<text:ordered-list[^>]*>(.*?)<\/text:ordered-list>/', '<ol>$1</ol>', $content);
 
-        // Convert list items
-        // Close list tags
-        $xml = str_replace(array('<text:list-item>', '</text:list-item>', '</text:list>', '</text:list>'), array('<li>', '</li>', '</ul>', '</ol>'), $xml);
-
-        return parent::handle($xml);
+        // Call the handle method of the parent class
+        return parent::handle($content, $zip, $images) ?? $content;
     }
 }

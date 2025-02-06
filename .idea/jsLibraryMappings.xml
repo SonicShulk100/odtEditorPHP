@@ -2,5 +2,6 @@
 <project version="4">
   <component name="JavaScriptLibraryMappings">
     <file url="PROJECT" libraries="{Trumbowyg, ckeditor, ckeditor5.umd, jquery, quill, quill.snow, summernote, trumbowyg, trumbowyg.base64, trumbowyg.colors}" />
+    <includedPredefinedLibrary name="HTTP Pre-Request and Response Handler" />
   </component>
 </project>

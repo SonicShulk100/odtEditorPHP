@@ -1,81 +1,59 @@
 <?php
 
-//Importation des classes nécessaires
-require_once "ODTExtractor.php";
-require_once "utils/HTML/FormattingHandler.php";
-require_once "utils/HTML/HyperlinkHandler.php";
-require_once "utils/HTML/ImageHandler.php";
-require_once "utils/HTML/ListHandler.php";
-require_once "utils/HTML/PreprocessingHandler.php";
-require_once "utils/HTML/StructuralConversionHandler.php";
-require_once "utils/HTML/TableHandler.php";
-require_once "utils/HTML/StyleHandler.php";
+//Importations des classes nécessaires.
+require_once 'Handler.php';
+require_once 'HTML/ImageHandler.php';
+require_once 'HTML/ParagraphHandler.php';
+require_once 'HTML/StyleHandler.php';
+require_once 'HTML/ListHandler.php';
+require_once 'HTML/TableHandler.php';
+require_once 'HTML/FontHandler.php';
+require_once 'HTML/MarginHandler.php';
+require_once 'HTML/HeaderFooterHandler.php';
+require_once 'HTML/RootHandler.php';
 
-class ODTToHTMLConverter
-{
-    private XMLToHTMLHandler $handlerChain;
+/**
+ * Convertisseur de fichier ODT en HTML
+ */
+class ODTToHTMLConverter {
+    private $handler;
 
     /**
-     * Constructeur de la classe.
+     * Constructeur de la classe
      */
-    public function __construct()
-    {
-        // Initialize the chain of responsibility
-        $preprocessor = new PreprocessingHandler();
-        $structure = new StructuralConversionHandler();
-        $formatting = new FormattingHandler();
-        $hyperlinks = new HyperlinkHandler();
-        $images = new ImageHandler();
-        $tables = new TableHandler();
-        $lists = new ListHandler();
-        $styles = new StyleHandler();
-
-        // Set up the handler chain
-        $preprocessor
-            ->setNext($structure)
-            ->setNext($formatting)
-            ->setNext($hyperlinks)
-            ->setNext($images)
-            ->setNext($tables)
-            ->setNext($lists)
-            ->setNext($styles);
-
-        $this->handlerChain = $preprocessor;
+    public function __construct() {
+        $this->handler = new ImageHandler();
+        $this->handler
+            ->setNext(new ParagraphHandler())
+            ->setNext(new StyleHandler())
+            ->setNext(new ListHandler())
+            ->setNext(new TableHandler())
+            ->setNext(new FontHandler())
+            ->setNext(new MarginHandler())
+            ->setNext(new HeaderFooterHandler())
+            ->setNext(new RootHandler());
     }
 
     /**
-     * Convertit la structure d'un fichier ODT en HTML en fonction du fichier "content.xml".
-     * @param string $odtFilePath le fichier ODT à convertir
-     * @return string|null le contenu HTML converti ou NULL en cas d'erreur
+     * Convertit un fichier ODT en HTML
+     * @param string $odtFilePath le chemin du fichier ODT
+     * @return array|string|string[]|null le contenu HTML
+     * @throws RuntimeException si le fichier ODT ne peut pas être ouvert ou si le fichier content.xml ne peut pas être extrait
      */
-    public function convert(string $odtFilePath): ?string
-    {
-        try {
-            // Step 1: Extract content.xml
-            $xmlContent = ODTExtractor::extractContentXML($odtFilePath);
-            if (!$xmlContent) {
-                throw new RuntimeException("Failed to extract content.xml from ODT file.");
+    public function convert(string $odtFilePath) : array|string|null{
+        $zip = new ZipArchive();
+        if ($zip->open($odtFilePath) === TRUE) {
+            $content = $zip->getFromName('content.xml');
+
+            if ($content !== false) {
+                return $this->handler->handle($content, $zip, $images);
             }
 
-            // Step 2: Load XML content into DOMDocument
-            $doc = new DOMDocument();
-            libxml_use_internal_errors(true);
-            if (!$doc->loadXML('<?xml version="1.0" encoding="UTF-8"?><root>' . $xmlContent . '</root>')) {
-                error_log("Error: Invalid XML structure.");
-                foreach (libxml_get_errors() as $error) {
-                    error_log("XML Error: " . $error->message);
-                }
-                libxml_clear_errors();
-                throw new RuntimeException("Invalid XML structure.");
-            }
-
-            // Step 3: Convert to HTML using Chain of Responsibility
-            return $this->handlerChain->handle($doc->saveXML());
-
-        } catch (Exception $e) {
-            error_log("Error during conversion: " . $e->getMessage());
-            return "<p>Error converting document: " . htmlentities($e->getMessage()) . "</p>";
+            throw new RuntimeException('Could not extract content.xml from ODT file.');
         }
-    }
 
+        $zip->close();
+
+        throw new RuntimeException('Could not open ODT file.');
+    }
 }
