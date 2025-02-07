@@ -13,7 +13,7 @@ abstract class Handler {
         return $handler;
     }
 
-    public function handle($content, $zip, &$images) {
+    public function handle($content, ZipArchive $zip, &$images) {
         if ($this->nextHandler) {
             return $this->nextHandler->handle($content, $zip, $images);
         }

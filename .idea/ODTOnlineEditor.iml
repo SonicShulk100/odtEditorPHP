@@ -14,5 +14,8 @@
     <orderEntry type="library" name="trumbowyg" level="application" />
     <orderEntry type="library" name="trumbowyg.base64" level="application" />
     <orderEntry type="library" name="trumbowyg.colors" level="application" />
+    <orderEntry type="library" name="@editorjs" level="application" />
+    <orderEntry type="library" name="ckeditor5" level="application" />
+    <orderEntry type="library" name="jodit" level="application" />
   </component>
 </module>

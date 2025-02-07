@@ -38,8 +38,7 @@ function enregistrerModification(): void{
             header("location: index.php?action=utilisateur");
             exit();
         }
-        else{
-            echo "<p>Erreur : Fichier inexistant.</p>";
-        }
+
+        echo "<p>Erreur : Fichier inexistant.</p>";
     }
 }

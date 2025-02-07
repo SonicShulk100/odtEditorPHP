@@ -10,6 +10,7 @@ class TableHandler extends Handler {
         $content = preg_replace('/<table:table[^>]*>(.*?)<\/table:table>/', '<table>$1</table>', $content);
         $content = preg_replace('/<table:table-row[^>]*>(.*?)<\/table:table-row>/', '<tr>$1</tr>', $content);
         $content = preg_replace('/<table:table-cell[^>]*>(.*?)<\/table:table-cell>/', '<td>$1</td>', $content);
+        $content = preg_replace("/<text:table[^>]*>(.*?)<\/text:table>/", "<table>$1</table>", $content);
 
         // Call the handle method of the parent class
         return parent::handle($content, $zip, $images) ?? $content;

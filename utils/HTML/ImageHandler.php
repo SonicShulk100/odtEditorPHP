@@ -8,28 +8,22 @@ class ImageHandler extends Handler {
     /**
      * Gère la conversion des images
      * @param $content
-     * @param $zip
+     * @param ZipArchive $zip
      * @param $images
      * @return array|mixed|string|string[]|null la nouvelle valeur de content
      */
-    public function handle($content, $zip, &$images): mixed
+    public function handle($content, ZipArchive $zip, &$images): mixed
     {
-        // Ensure the directory for images exists
-        $imagesDir = 'images';
-        if (!is_dir($imagesDir) && !mkdir($imagesDir, 0777, true) && !is_dir($imagesDir)) {
-            throw new RuntimeException(sprintf('Directory "%s" was not created', $imagesDir));
-        }
-
         // Handle image conversion
-        // Extract images from the ODT content and store them separately
-        $content = preg_replace_callback('/<draw:image[^>]+xlink:href="([^"]+)"[^>]*>/', static function($matches) use ($zip, $imagesDir) {
-            $imageSrc = 'Pictures/' . basename($matches[1]);
+        // Extract images from the ODT content and encode them as base64
+        $content = preg_replace_callback('/<draw:image[^>]+xlink:href="([^"]+)"[^>]*>/', static function($matches) use ($zip) {
+            $imageSrc = 'Pictures/' . basename($matches[1]) . ".png";
             $imageData = $zip->getFromName($imageSrc);
-            // If the image is found in the ZIP archive, save it to the images directory
+            // If the image is found in the ZIP archive, encode it as base64
             if ($imageData !== false) {
-                $imagePath = $imagesDir . '/' . basename($matches[1]);
-                file_put_contents($imagePath, $imageData);
-                return '<img src="' . $imagePath . '" />';
+                $base64Image = base64_encode($imageData);
+                $mimeType = mime_content_type($imageSrc);
+                return '<img src="data:' . $mimeType . ';base64,' . $base64Image . '" />';
             }
 
             // If the image is not found in the ZIP archive, return the original image source

@@ -21,20 +21,40 @@ if ($idFichier) {
 
             <label for="contenuFichier">Contenu du fichier :</label>
             <br>
-            <textarea id="contenuFichier" name="contenuFichier"> <?php echo htmlspecialchars($fichier->getContenu());?></textarea>
+            <!-- Changed from div to textarea -->
+            <textarea name="contenuFichier" id="contenuFichier">
+                <?php echo htmlspecialchars($fichier->getContenu()); ?>
+            </textarea>
+
             <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/2.26.0/trumbowyg.min.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/jodit@latest/es2021/jodit.fat.min.js"></script>
+
             <script>
-                $(document).ready(
-                    function () {
-                        $('#contenuFichier').trumbowyg();
-                    }
-                );
+                document.addEventListener("DOMContentLoaded", function () {
+                    const editor = new Jodit("#contenuFichier", {
+                        uploader: {
+                            insertImageAsBase64URI: true
+                        },
+                        toolbarAdaptive: false,
+                        toolbarSticky: false,
+                        toolbarButtonSize: "large",
+                        toolbarButtonIcons: {
+                            more: "⋮"
+                        },
+                        buttons: "source,|,bold,strikethrough,underline,italic,|,superscript,subscript,|,ul,ol,|,outdent,indent,|,font,fontsize,brush,paragraph,|,image,video,table,link,|,align,undo,redo,|,hr,symbol,fullsize",
+                    });
+                });
             </script>
+
             <br>
-            <button type="submit" class="button">Enregistrer les modifications</button>
-            <button type="submit" class="button">Annuler</button>
+            <button type="submit" class="button" id="enregistrer">Enregistrer les modifications</button>
+            <button type="submit" class="button" id="annuler">Annuler</button>
         </form>
     </section>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
     <?php require_once "views/bas.php"; ?>
 </div>

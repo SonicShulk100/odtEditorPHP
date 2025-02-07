@@ -1,69 +1,76 @@
 <?php
 
+// Require the necessary files.
+// The require_once statement is identical to require except PHP will check if the file has already been included, and if so, not include (require) it again.
+require_once "models/DAO/FichierDAO.php";
+require_once "models/DTO/Fichier.php";
+
 /**
  * Contrôleur de la création du fichier.
  * @return void Le contrôleur est sous-obligation de ne pas retourner quelque chose.
  */
-function creer(): void{
+function creerFichier(): void{
     include "views/creerFichier/vueCreerFichier.php";
 }
 
 /**
- * Contrôleur pour la création du fichier ODT.
- * @return void Comme la fonction creer(), le contrôleur est sous-obligation de ne pas retourner quelque chose.
+ * for the creation of a file with the form.
+ * @return void
  */
-function creerFichier(): void{
+function enregCreer(): void
+{
+    // Check if the request method is POST.
+    if ($_SERVER["REQUEST_METHOD"] === "POST") {
+        // Forcez la synchronisation des données
+        $_POST['editionFichier'] = isset($_POST['editionFichier']) ?
+            htmlspecialchars($_POST['editionFichier'], ENT_QUOTES) : '';
 
-    //Vérification si la méthode est bien POST
-    if($_SERVER["REQUEST_METHOD"] === "POST"){
-        //Si on a cliqué sur le bouton enregistrer...
-        if(isset($_POST["enregistrer"])){
+        // Get the name of the file.
+        $nomFichier = $_POST['nomFichier'] ?? '';
+        $contenuFichier = $_POST['editionFichier'];
+        $idUtilisateur = $_SESSION['idUtilisateur'];
 
-            //Récupération des données contenu dans le Formulaire.
-            $nomFichier = $_POST["nomFichier"];
-            $contenuFichier = $_POST["editionFichier"];
-            $idUtilisateur = $_SESSION["idUtilisateur"] ?? null;
+        // Check if the file name is not empty.
+        if (!empty($nomFichier)) {
+            // Convert the content of the file to binary.
             $binary = stringToBinary($contenuFichier);
-
-            //Initialisation de la base de données afin de faire une insertion dans la base de données
             $response = FichierDAO::createFichier($nomFichier, $contenuFichier, $idUtilisateur, $binary);
 
-            //Si c'est fait...
-            if($response){
-                //Alors, on va dans la page de dl'utilisateur.
-                echo "<p>Création faite !</p>";
+            // Check if the response is true.
+            if ($response) {
+                // Redirect to the user page.
                 header("location: ../index.php?action=utilisateur");
                 exit();
             }
-
-            //Sinon, on affiche une erreur.
-            echo "<p>Erreur !</p>";
-        }
-        else if(isset($_POST["annuler"])){
-            //Sinon, on va vers la page de l'utilisateur.
-            header("location: ../index.php?action=utilisateur");
+        } else {
+            // Redirect to the creation page with an error message.
+            header("location: /index.php?action=creer&erreur=nom_vide");
             exit();
         }
-
     }
-
-    include "views/creerFichier/vueCreerFichier.php";
 }
 
 /**
  * Convertir une chaîne de caractères en Binaire.
- * @param string $string la chaîne de caractère en question.
+ * @param string|null $string la chaîne de caractère en question.
  * @return string la chaîne de caractères convertit en binaire.
  */
-function stringToBinary(string $string): string
+function stringToBinary(?string $string): string
 {
+    // Split the string into an array of characters.
     $characters = str_split($string);
 
+    // Convert each character to binary.
     $binary = [];
+
+    // Loop through each character.
     foreach ($characters as $character) {
+        // Unpack the character.
         $data = unpack('H*', $character);
+        // Convert the character to binary.
         $binary[] = base_convert($data[1], 16, 2);
     }
 
+    // Return the binary string.
     return implode(' ', $binary);
 }

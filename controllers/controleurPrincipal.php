@@ -38,10 +38,10 @@ switch($action) {
         aPropos();
         break;
     case "créer":
-        creer();
-        break;
-    case "creerFichier":
         creerFichier();
+        break;
+    case "enregCreer":
+        enregCreer();
         break;
     case "contact":
         contact();

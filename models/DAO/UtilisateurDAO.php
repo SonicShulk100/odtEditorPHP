@@ -28,7 +28,7 @@ class UtilisateurDAO {
         }
     }
 
-    public static function getUtilisateurById(?int $idUtilisateur): array{
+    public static function getUtilisateurById(?int $idUtilisateur): array|string{
         $db = new PDO(Param::DSN, Param::USER, Param::PASS);
 
         try{

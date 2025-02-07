@@ -37,6 +37,7 @@ body{
 
 a{
     text-decoration: none;
+    color: black;
 }
 
 a:visited{
@@ -74,4 +75,15 @@ h2{
 
 .paragraph p{
     font-size: 18px;
+}
+
+.conainer{
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+}
+
+section{
+    flex-grow: 1;
+    padding-bottom: 40px;
 }

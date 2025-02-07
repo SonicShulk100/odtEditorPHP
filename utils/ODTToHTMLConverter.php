@@ -11,6 +11,17 @@ require_once 'HTML/FontHandler.php';
 require_once 'HTML/MarginHandler.php';
 require_once 'HTML/HeaderFooterHandler.php';
 require_once 'HTML/RootHandler.php';
+require_once 'HTML/SequenceDeclsHandler.php';
+require_once 'HTML/StyleAttributeHandler.php';
+require_once 'HTML/FrameHandler.php';
+require_once 'HTML/AutomaticStylesHandler.php';
+require_once 'HTML/BodyHandler.php';
+require_once 'HTML/TextHandler.php';
+require_once 'HTML/TabHandler.php';
+require_once 'HTML/SpanHandler.php';
+require_once 'HTML/ListItemHandler.php';
+require_once 'HTML/FontFaceDeclsHandler.php';
+require_once 'HTML/TabStopHandler.php';
 
 /**
  * Convertisseur de fichier ODT en HTML
@@ -31,7 +42,18 @@ class ODTToHTMLConverter {
             ->setNext(new FontHandler())
             ->setNext(new MarginHandler())
             ->setNext(new HeaderFooterHandler())
-            ->setNext(new RootHandler());
+            ->setNext(new RootHandler())
+            ->setNext(new SequenceDeclsHandler())
+            ->setNext(new StyleAttributeHandler())
+            ->setNext(new FrameHandler())
+            ->setNext(new AutomaticStylesHandler())
+            ->setNext(new BodyHandler())
+            ->setNext(new TextHandler())
+            ->setNext(new TabHandler())
+            ->setNext(new SpanHandler())
+            ->setNext(new ListItemHandler())
+            ->setNext(new FontFaceDeclsHandler())
+            ->setNext(new TabStopHandler());
     }
 
     /**

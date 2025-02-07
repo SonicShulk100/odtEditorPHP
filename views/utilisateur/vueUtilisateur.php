@@ -37,5 +37,10 @@
             </tbody>
         </table>
     </section>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
     <?php require_once "views/bas.php"; ?>
 </div>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="JavaScriptLibraryMappings">
-    <file url="PROJECT" libraries="{Trumbowyg, ckeditor, ckeditor5.umd, jquery, quill, quill.snow, summernote, trumbowyg, trumbowyg.base64, trumbowyg.colors}" />
+    <file url="PROJECT" libraries="{@editorjs, Trumbowyg, ckeditor, ckeditor5, ckeditor5.umd, jodit, jquery, quill, quill.snow, summernote, trumbowyg, trumbowyg.base64, trumbowyg.colors}" />
     <includedPredefinedLibrary name="HTTP Pre-Request and Response Handler" />
   </component>
 </project>
