@@ -176,37 +176,43 @@ class FichierDAO {
     }
 
     /**
-     * Supression du fichier
+     * Suppression du fichier
      * @param int|null $idFichier l'ID du fichier en question
      * @param int|null $idUtilisateur l'ID de l'utilisateur
-     * @return bool TRUE si la supression est bien faite, FALSE sinon.
+     * @return bool TRUE si la suppression est bien faite, FALSE sinon.
      */
-    public static function deleteFichier(?int $idFichier, ?int $idUtilisateur): bool{
+    public static function deleteFichier(?int $idFichier, ?int $idUtilisateur): bool {
+        if (!$idFichier || !$idUtilisateur) {
+            return false;
+        }
+
         $db = new PDO(Param::DSN, Param::USER, Param::PASS);
-        $db->exec("SET AUTOCOMMIT=0");
         $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-        try{
+        try {
             $db->beginTransaction();
 
-            $sql = "DELETE FROM fichier WHERE idFichier = ? OR idUtilisateur = ?";
-
-            //Préparation de la requête SQL
+            $sql = "DELETE FROM fichier WHERE idFichier = ? AND idUtilisateur = ?";
             $stmt = $db->prepare($sql);
+            $stmt->bindValue(1, $idFichier, PDO::PARAM_INT);
+            $stmt->bindValue(2, $idUtilisateur, PDO::PARAM_INT);
 
-            //Mise ne place du paramètre
-            $stmt->bindParam(1, $idFichier);
-            $stmt->bindParam(2, $idUtilisateur);
-
-            //Execution
             $stmt->execute();
 
-            //Commitage
-            return $db->commit();
-        }
-        catch (PDOException $e){
+            var_dump($stmt->rowCount());
+
+            if ($stmt->rowCount() > 0) {
+                $db->commit();
+                return true;
+            }
+
             $db->rollBack();
-            die('Erreur : '.$e->getMessage());
+            return false;
+        } catch (PDOException $e) {
+            $db->rollBack();
+            error_log("Erreur de suppression du fichier: " . $e->getMessage());
+            return false;
         }
     }
+
 }

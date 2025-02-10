@@ -41,8 +41,9 @@ if ($idFichier) {
                         toolbarButtonIcons: {
                             more: "⋮"
                         },
-                        buttons: "source,|,bold,strikethrough,underline,italic,|,superscript,subscript,|,ul,ol,|,outdent,indent,|,font,fontsize,brush,paragraph,|,image,video,table,link,|,align,undo,redo,|,hr,symbol,fullsize",
+                        buttons: "source,|,bold,strikethrough,underline,italic,|,superscript,subscript,|,ul,ol,|,outdent,indent,|,font,fontsize,brush,paragraph,|,image,video,table,link,|,align,undo,redo,|,hr,symbol,fullsize"
                     });
+                    editor.buildToolbar();
                 });
             </script>
 
@@ -51,10 +52,5 @@ if ($idFichier) {
             <button type="submit" class="button" id="annuler">Annuler</button>
         </form>
     </section>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
     <?php require_once "views/bas.php"; ?>
 </div>

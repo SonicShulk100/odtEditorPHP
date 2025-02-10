@@ -1,3 +1,6 @@
+/*
+Alignement du contenu du footer.
+ */
 .present li{
     display: inline-block;
     text-decoration: none;
@@ -5,6 +8,9 @@
     margin-top: 25px;
 }
 
+/*
+Footer de la page.
+ */
 footer{
     margin-top: 50px;
     text-align: center;
@@ -15,16 +21,30 @@ footer{
     padding: 5px;
 }
 
+/*
+Tableau d'utilisateur contenant :
+- l'ID
+- le nom
+- le contenu
+- la date de création et de mise à jour
+- l'ID de l'utilisateur.
+ */
 #tableFichiersODTUtilisateur{
     border-width: thick;
     border-color: black;
     font-family: "Consolas", "Courier", "Courier New", monospace;
 }
 
+/*
+Couleur de la page.
+*/
 body{
     background-color: darkcyan;
 }
 
+/*
+Le <div> désignant un bouton
+ */
 .button{
     background-color: cadetblue;
     font-size: 25px;
@@ -35,6 +55,10 @@ body{
     color: black;
 }
 
+/*
+les liens existants dans les boutons
+WARNING : a:visited, a:hover et <a> tout court doivent avoir le texte de couleur noir.
+ */
 a{
     text-decoration: none;
     color: black;
@@ -45,11 +69,17 @@ a:visited{
     color: black;
 }
 
+/*
+Cas où l'utilisateur met le pointeur sur le texte d'un bouton.
+*/
 a:hover{
     text-decoration: none;
     color: bisque;
 }
 
+/*
+Les liens dans le tableau de l'utilisateur.
+ */
 #tableFichiersODTUtilisateur a{
     text-decoration: none;
     color: black;
@@ -60,6 +90,9 @@ a:hover{
     color: bisque;
 }
 
+/*
+Titre de la page.
+ */
 h2{
     text-align: center;
     font-family: "Consolas", "Courier", "Courier New", monospace;
@@ -67,6 +100,9 @@ h2{
     color: bisque;
 }
 
+/*
+classe désignant un paragraph avec son élément <p>
+ */
 .paragraph{
     font-family: "Consolas", "Courier", "Courier New", monospace;
     text-decoration: none;
@@ -77,13 +113,36 @@ h2{
     font-size: 18px;
 }
 
-.conainer{
+/*
+Toute l'ensemble de la page.
+ */
+.container{
     display: flex;
     min-height: 100vh;
     flex-direction: column;
 }
 
+/*
+La page principal.
+ */
 section{
     flex-grow: 1;
     padding-bottom: 40px;
+}
+
+/*
+Cas de suppression:
+- .alertalert-danger si rien ne va
+- .alertalert-success si tout allait bien.
+*/
+.alertalert-danger{
+    font-family: "Consolas", "Courier", "Courier New", monospace;
+    color:darkblue;
+    font-size: 25px;
+}
+
+.alertalert-success{
+    font-family: "Consolas", "Courier", "Courier New", monospace;
+    color:darkblue;
+    font-size: 25px;
 }

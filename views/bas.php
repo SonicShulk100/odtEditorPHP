@@ -4,7 +4,7 @@
         <li>|</li>
         <li>Langage : PHP</li>
         <li>|</li>
-        <li>BTS - SIO 2ème année</li>
+        <li>BTS - SIO 2ᵉ année</li>
         <li>|</li>
         <li>Option : SLAM</li>
     </ul>

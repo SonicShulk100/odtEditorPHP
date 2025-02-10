@@ -52,7 +52,7 @@ switch($action) {
     case "supprimerFichier":
         supprimerFichier();
         break;
-    case "supprimerFichier1":
-        supprimerFichier1();
+    case "supprimer":
+        supprimer();
         break;
 }

@@ -1,41 +1,87 @@
 <?php
 
+//Importation du DAO nécessaire.
+require_once "models/DAO/FichierDAO.php";
+
+//Récupération des erreurs.
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
+
 /**
- * Contrôleur pour la suppression d'un fichier ODT en fonction
- * de l'ID du fichier.
- * @return void le contrôleur est sous obligation de ne rien retourner.
+ * Contrôleur pour la suppression d'un fichier ODT en fonction de l'ID du fichier.
+ * @return void Les contrôleurs ne doivent pas retourner une réponse.
  */
-function supprimerFichier(): void{
-    include "views/supprimerFichier/vueSupprimerFichier.php";
+function supprimerFichier(): void {
+    // Récupération des paramètres depuis l'URL
+    $idFichier = filter_input(INPUT_GET, 'idFichier', FILTER_VALIDATE_INT);
+    $idUtilisateur = filter_input(INPUT_GET, 'idUtilisateur', FILTER_VALIDATE_INT);
+
+    // Vérification des paramètres
+    if ($idFichier === false || $idUtilisateur === false) {
+        header('Location: index.php?action=utilisateur&erreur=parametres_invalides');
+        exit();
+    }
+
+    // Passage des paramètres à la vue
+    $_SESSION['suppression_fichier'] = [
+        'idFichier' => $idFichier,
+        'idUtilisateur' => $idUtilisateur
+    ];
+
+    include_once "views/supprimerFichier/vueSupprimerFichier.php";
+
 }
 
 /**
- * Le contrôleur qui utilise le DAO de fichier
- * @return void Comme pour le
+ * Contrôleur qui supprime un fichier ou redirige simplement en cas de refus.
+ * @return void Comme la fonction "supprimerFichier", cette fonction est sous obligation de ne rien retourner.
  */
-function supprimerFichier1(): void{
-    if($_SERVER["REQUEST_METHOD"] === "POST"){
-        if(isset($_POST["validation"])){
+function supprimer(): void {
+    // Vérification de la méthode HTTP
+    if ($_SERVER["REQUEST_METHOD"] !== "POST") {
+        header("Location: index.php?action=utilisateur");
+        exit();
+    }
 
-            $idFichier = $_POST["idFichier"];
-            $idUtilisateur = $_POST["idUtilisateur"];
+    // Initialisation du statut et du message d'erreur
+    $statutSuppression = null;
+    $messageErreur = '';
 
-            $response = FichierDAO::deleteFichier($idFichier, $idUtilisateur) ?? false;
+    // Traitement de la validation
+    if (isset($_POST["validation"])) {
+        $idFichier = filter_input(INPUT_POST, "idFichier", FILTER_VALIDATE_INT);
+        $idUtilisateur = filter_input(INPUT_POST, "idUtilisateur", FILTER_VALIDATE_INT);
 
-            if($response){
-                echo "<p>Suppression faite.</p>";
-                header("Location : index.php?action=utilisateur");
-                exit();
+        // Vérification des paramètres
+        if ($idFichier === false || $idUtilisateur === false) {
+            $messageErreur = 'Paramètres invalides';
+        } else {
+            try {
+                $statutSuppression = FichierDAO::deleteFichier($idFichier, $idUtilisateur);
+
+                // Si la suppression échoue, capturer l'erreur précise
+                if ($statutSuppression === false) {
+                    $messageErreur = 'Échec de la suppression du fichier';
+                }
+            } catch (PDOException $e) {
+                $messageErreur = 'Erreur technique : ' . htmlspecialchars($e->getMessage());
             }
-            echo "<p>Impossible de supprimer le fichier.</p>";
-            header("Location : index.php?action=utilisateur");
-            exit();
-
-        }
-
-        if(isset($_POST["refus"])){
-            header("Location: index.php?action=utilisateur");
-            exit();
         }
     }
+
+    // Redirection avec le statut et le message d'erreur si nécessaire
+    $params = ['suppression' => ($statutSuppression ? 'success' : 'erreur')];
+    if (!empty($messageErreur)) {
+        $params['erreur'] = htmlspecialchars($messageErreur);
+    }
+
+    header('Location: index.php?action=utilisateur&' . http_build_query($params));
+    exit();
+}
+
+// Ajouter cette fonction pour le débogage
+function debugPDO(PDO $pdo): void {
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $pdo->setAttribute(PDO::SQLSRV_ATTR_DIRECT_QUERY, true);
 }
