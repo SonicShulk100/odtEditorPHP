@@ -1,50 +1,63 @@
 <?php
-//Initialisation du statut de suppression et du message d'erreur.
+// Importation des fichiers nécessaires
+require_once "controllers/controleurCreerFichier.php";
+require_once "controllers/controleurSupprimerFichier.php";
+
+// Initialisation du statut de suppression et du message d'erreur.
+$statutAjout = $_GET["création"] ?? null;
 $statutSuppression = $_GET['suppression'] ?? null;
 $messageErreur = $_GET['erreur'] ?? null;
 
-//Un succès?
+// Gestion des messages de notification
+$message = '';
 if ($statutSuppression === 'success') {
-    //Affichage du message.
     $message = '<div class="alertalert-success">Le fichier a été supprimé avec succès.</div>';
-    //Quelque chose n'allait pas pendant la suppression du fichier ?
-} elseif ($statutSuppression === 'erreur') {
-    //Affichage de l'erreur.
-    $message = '<div class="alertalert-danger">' . $messageErreur . '</div>';
+} elseif ($statutAjout === "success") {
+    $message = "<div class='alert alert-success'>Le fichier a été ajouté avec succès.</div>";
+} elseif ($statutSuppression === 'erreur' || $statutAjout === "erreur") {
+    $message = '<div class="alertalert-danger">' . htmlspecialchars($messageErreur) . '</div>';
 }
 ?>
 
 <!-- Conteneur de la page -->
 <div class="container">
     <nav>
-        <?php
-        //Affichage des boutons de navigation.
-        require_once "views/haut.php";
-        ?>
+        <?php require_once "views/haut.php"; ?>
     </nav>
     <section>
-        <h2>Utilisateur :<?php print_r(UtilisateurDAO::getUtilisateurById((int)$_SESSION['idUtilisateur'])); ?></h2>
-        <!-- Votre contenu existant -->
-        <?php echo $message ?? ''; ?>
-        <!-- Création d'un tableau pour les fichiers ODT. -->
+        <h2>Utilisateur :
+            <?php
+            $utilisateurs = UtilisateurDAO::getUtilisateurById((int)$_SESSION['idUtilisateur']);
+            foreach ($utilisateurs as $utilisateur){
+                echo htmlspecialchars($utilisateur->getNomutilisateur()) . " " . htmlspecialchars($utilisateur->getPrenom());
+            }
+            ?>
+        </h2>
+
+        <!-- Affichage des notifications -->
+        <?php
+        if (!empty($message)) {
+            echo $message;
+        }
+        ?>
+
+        <!-- Tableau pour les fichiers ODT -->
         <table id="tableFichiersODTUtilisateur" border="3">
             <thead>
-                <tr>
-                    <th>ID du fichier</th>
-                    <th>Nom du fichier</th>
-                    <th>Contenu du fichier</th>
-                    <th>Date de création</th>
-                    <th>Date de mise à Jour</th>
-                    <th>Action</th>
-                </tr>
+            <tr>
+                <th>ID du fichier</th>
+                <th>Nom du fichier</th>
+                <th>Contenu du fichier</th>
+                <th>Date de création</th>
+                <th>Date de mise à jour</th>
+                <th>Action</th>
+            </tr>
             </thead>
             <tbody>
-            <br>
             <?php
-            //Récupération des fichiers en fonction de l'utilisateur.
+            // Récupération des fichiers de l'utilisateur
             $fichiers = FichierDAO::getFichiersByIdUtilisateur((int)$_SESSION['idUtilisateur']);
 
-            // Affichage des fichiers récupérés dans le tableau
             foreach ($fichiers as $fichier) {
                 echo "<tr>";
                 echo "<td>" . htmlspecialchars($fichier->getId()) . "</td>";
@@ -62,8 +75,5 @@ if ($statutSuppression === 'success') {
             </tbody>
         </table>
     </section>
-    <?php
-        //Importation du footer.
-        require_once "views/bas.php";
-    ?>
+    <?php require_once "views/bas.php"; ?>
 </div>

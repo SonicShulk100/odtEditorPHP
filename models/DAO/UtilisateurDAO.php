@@ -28,16 +28,33 @@ class UtilisateurDAO {
         }
     }
 
-    public static function getUtilisateurById(?int $idUtilisateur): array|string{
+    /**
+     * On récupère le nom et prénom pour l'affichage dans le dashboard de l'utilisateur.
+     * @param int|null $idUtilisateur l'ID de l'utilisateur.
+     * @return array|bool
+     */
+    public static function getUtilisateurById(?int $idUtilisateur): array|bool{
         $db = new PDO(Param::DSN, Param::USER, Param::PASS);
 
         try{
-            $SQL = "SELECT nom, prenom FROM utilisateur WHERE idUtilisateur = ?";
+            $SQL = "SELECT * FROM utilisateur WHERE idUtilisateur = ?";
 
             $stmt = $db->prepare($SQL);
             $stmt->execute([$idUtilisateur]);
 
-            return $stmt->fetch(PDO::FETCH_ASSOC);
+            $utilisateur = [];
+
+            while($row = $stmt->fetch(PDO::FETCH_ASSOC)){
+                $utilisateur[] = new Utilisateur(
+                    $row["idUtilisateur"],
+                    $row["nom"],
+                    $row["prenom"],
+                    $row["login"],
+                    $row["mdp"]
+                );
+            }
+
+            return $utilisateur;
         }
         catch(PDOException $e){
             die('Erreur : '.$e->getMessage());
@@ -48,7 +65,7 @@ class UtilisateurDAO {
      * Vérification en cas de connexion.
      * @param string|null $login le login(en email)
      * @param string|null $mdp le MDP (encodage MD5)
-     * @return array|bool TRUE si l'utilisateur existe et crée une array contenant les données, FALSE sinon.
+     * @return array|bool TRUE si l'utilisateur existe et crée une array contenant les données de cet utilisateur, FALSE sinon.
      */
     public static function verif(?string $login, ?string $mdp): array|bool{
         $db = new PDO(Param::DSN, Param::USER, Param::PASS);
@@ -76,7 +93,7 @@ class UtilisateurDAO {
      * @param string|null $prenom le prénom de l'utilisateur
      * @param string|null $login le login (mail) de l'utilisateur
      * @param string|null $mdp le MDP (encodage MD5) de l'utilisateur
-     * @return bool TRUE si l'inscription est fait, FALSE sinon.
+     * @return bool TRUE si on est inscrit, FALSE sinon.
      */
     public static function createUtilisateur(?string $nom, ?string $prenom, ?string $login, ?string $mdp): bool{
         $db = new PDO(Param::DSN, Param::USER, Param::PASS);
@@ -96,7 +113,7 @@ class UtilisateurDAO {
             //Execution de la requête avec les paramètres.
             $stmt->execute([$nom, $prenom, $login, $mdp]);
 
-            //Commitage
+            //Committer
             return $db->commit();
         }
         catch(PDOException $e){
@@ -139,7 +156,7 @@ class UtilisateurDAO {
             //Execution de la requête
             $stmt->execute();
 
-            //Commitage
+            //Committer
             return $db->commit();
         }
         catch(PDOException $e){
@@ -162,7 +179,7 @@ class UtilisateurDAO {
             //Début de la transaction
             $db->beginTransaction();
 
-            //Requête de la supression
+            //Requête de la suppression
             $sql = "DELETE FROM utilisateur WHERE idUtilisateur = ?";
 
             //Préparation de la requête.
@@ -171,7 +188,7 @@ class UtilisateurDAO {
             //Execution de la requête.
             $stmt->execute([$idUtilisateur]);
 
-            //Commitage.
+            //Committer
             return $db->commit();
         }
         catch(PDOException $e){

@@ -17,7 +17,7 @@ class ImageHandler extends Handler {
         // Handle image conversion
         // Extract images from the ODT content and encode them as base64
         $content = preg_replace_callback('/<draw:image[^>]+xlink:href="([^"]+)"[^>]*>/', static function($matches) use ($zip) {
-            $imageSrc = 'Pictures/' . basename($matches[1]) . ".png";
+            $imageSrc = '/Pictures/' . basename($matches[1]);
             $imageData = $zip->getFromName($imageSrc);
             // If the image is found in the ZIP archive, encode it as base64
             if ($imageData !== false) {

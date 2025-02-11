@@ -1,32 +1,6 @@
 <?php
 class FichierDAO {
     /**
-     * Récupération des fichiers dans la base de données.
-     * @return array|bool les données sous format JSON
-     */
-    public static function getAllFichiers(): array|bool{
-        //Instanciation d'un PDO
-        $db = new PDO(Param::DSN, Param::USER, Param::PASS);
-
-        try{
-            //Requête SQL
-            $SQL = "SELECT * FROM fichier";
-
-            //Préparation de la requête SQL
-            $stmt = $db->prepare($SQL);
-
-            //Exécution de la requête
-            $stmt->execute();
-
-            //Récupération des données
-            return $stmt->fetchAll(PDO::FETCH_ASSOC);
-        }
-        catch(PDOException $e){
-            die('Erreur : '.$e->getMessage());
-        }
-    }
-
-    /**
      * Récupération du fichier en question dans la base de données.
      * @param int|null $id l'ID du fichier en quesiton
      * @return array|bool|Fichier|null TRUE si il existe, FALSE sinon.
@@ -94,10 +68,7 @@ class FichierDAO {
             }
 
             return $fichiers;
-        } catch (PDOException $e) {
-            error_log('Erreur : ' . $e->getMessage());
-            return [];
-        } catch (Exception $e) {
+        } catch (PDOException|Exception $e) {
             die('Erreur : ' . $e->getMessage());
         }
     }
@@ -199,7 +170,6 @@ class FichierDAO {
 
             $stmt->execute();
 
-            var_dump($stmt->rowCount());
 
             if ($stmt->rowCount() > 0) {
                 $db->commit();
@@ -210,8 +180,7 @@ class FichierDAO {
             return false;
         } catch (PDOException $e) {
             $db->rollBack();
-            error_log("Erreur de suppression du fichier: " . $e->getMessage());
-            return false;
+            die("Erreur de suppression du fichier: " . $e->getMessage());
         }
     }
 

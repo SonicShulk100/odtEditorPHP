@@ -12,7 +12,6 @@ function modifierFichier(): void{
 
     //Pas d'ID de fichier?
     if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
-
         //Affichage de l'erreur.
         echo "Erreur : ID de fichier invalide.";
         return;

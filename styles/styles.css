@@ -30,9 +30,13 @@ Tableau d'utilisateur contenant :
 - l'ID de l'utilisateur.
  */
 #tableFichiersODTUtilisateur{
-    border-width: thick;
+    border-width: 3px;
     border-color: black;
     font-family: "Consolas", "Courier", "Courier New", monospace;
+    border-spacing: 3px;
+    border-collapse: separate;
+    width:100%;
+    table-layout: auto;
 }
 
 /*

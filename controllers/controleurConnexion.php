@@ -7,7 +7,7 @@ if(session_status() === PHP_SESSION_NONE){
 }
 
 /**
- * Contrôleur entière de la connexion
+ * Contrôleur entier de la connexion
  * @return void Le contrôleur ici gère la connexion dans le site. Le contrôleur est
  * sous-obligation de ne rien retourner.
  */
@@ -26,9 +26,9 @@ function connexion(): void
             $_SESSION['idUtilisateur'] = $utilisateur['idUtilisateur'];
             header('Location: index.php?action=utilisateur');
             exit();
-        } else {
-            echo 'Erreur : Identifiants incorrects.';
         }
+
+        echo 'Erreur : Identifiants incorrects.';
     }
 
     include 'views/connexion/vueConnexion.php';

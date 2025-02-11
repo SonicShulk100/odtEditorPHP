@@ -1,76 +1,86 @@
 <?php
 
-// Require the necessary files.
-// The require_once statement is identical to require except PHP will check if the file has already been included, and if so, not include (require) it again.
 require_once "models/DAO/FichierDAO.php";
 require_once "models/DTO/Fichier.php";
 
 /**
  * Contrôleur de la création du fichier.
- * @return void Le contrôleur est sous-obligation de ne pas retourner quelque chose.
+ * @return void
  */
-function creerFichier(): void{
+function creerFichier(): void {
+    $idUtilisateur = $_SESSION["idUtilisateur"] ?? false;
+
+    if ($idUtilisateur === false) {
+        header("Location: index.php?action=utilisateur&erreur=parametres_invalides");
+        exit();
+    }
+
+    $_SESSION["créationFichier"] = ["idUtilisateur" => $idUtilisateur];
+
     include "views/creerFichier/vueCreerFichier.php";
 }
 
 /**
- * for the creation of a file with the form.
+ * Création d'un fichier via un formulaire.
  * @return void
  */
-function enregCreer(): void
-{
-    // Check if the request method is POST.
-    if ($_SERVER["REQUEST_METHOD"] === "POST") {
-        // Forcez la synchronisation des données
-        $_POST['editionFichier'] = isset($_POST['editionFichier']) ?
-            htmlspecialchars($_POST['editionFichier'], ENT_QUOTES) : '';
+function enregCreer(): void {
+    if ($_SERVER["REQUEST_METHOD"] !== "POST") {
+        header("Location: index.php?action=utilisateur");
+        exit();
+    }
 
-        // Get the name of the file.
-        $nomFichier = $_POST['nomFichier'] ?? '';
-        $contenuFichier = $_POST['editionFichier'];
-        $idUtilisateur = $_SESSION['idUtilisateur'];
+    $statutAjout = false;
+    $messageErreur = "";
 
-        // Check if the file name is not empty.
-        if (!empty($nomFichier)) {
-            // Convert the content of the file to binary.
-            $binary = stringToBinary($contenuFichier);
-            $response = FichierDAO::createFichier($nomFichier, $contenuFichier, $idUtilisateur, $binary);
+    if (isset($_POST["enregistrer"])) {
+        $idUtilisateur = filter_input(INPUT_POST, "idUtilisateur", FILTER_VALIDATE_INT);
+        $nomFichier = filter_input(INPUT_POST, "nomFichier", FILTER_SANITIZE_STRING);
 
-            // Check if the response is true.
-            if ($response) {
-                // Redirect to the user page.
-                header("location: ../index.php?action=utilisateur");
-                exit();
-            }
+        if ($idUtilisateur === false || empty($nomFichier)) {
+            $messageErreur = "Paramètres invalides";
         } else {
-            // Redirect to the creation page with an error message.
-            header("location: /index.php?action=creer&erreur=nom_vide");
-            exit();
+            try {
+                $contenuFichier = $_POST["editionFichier"] ?? "";
+                $binaire = stringToBinary($contenuFichier);
+                $statutAjout = FichierDAO::createFichier($nomFichier, $contenuFichier, $idUtilisateur, $binaire);
+
+                if (!$statutAjout) {
+                    $messageErreur = "Échec de la création du fichier";
+                }
+            } catch (PDOException $e) {
+                $messageErreur = "Erreur technique : " . htmlspecialchars($e->getMessage());
+            }
         }
     }
+    if(isset($_POST["annuler"])){
+        header("Location: index.php?action=utilisateur&erreur=Annulation_de_la_creation");
+        exit();
+    }
+
+    $params = ["création" => $statutAjout ? "success" : "erreur"];
+    if (!empty($messageErreur)) {
+        $params["erreur"] = htmlspecialchars($messageErreur);
+    }
+
+    header("Location: index.php?action=utilisateur&" . http_build_query($params));
+    exit();
 }
 
 /**
- * Convertir une chaîne de caractères en Binaire.
- * @param string|null $string la chaîne de caractère en question.
- * @return string la chaîne de caractères convertit en binaire.
+ * Convertit une chaîne en binaire.
+ * @param string|null $string
+ * @return string
  */
-function stringToBinary(?string $string): string
-{
-    // Split the string into an array of characters.
-    $characters = str_split($string);
-
-    // Convert each character to binary.
-    $binary = [];
-
-    // Loop through each character.
-    foreach ($characters as $character) {
-        // Unpack the character.
-        $data = unpack('H*', $character);
-        // Convert the character to binary.
-        $binary[] = base_convert($data[1], 16, 2);
+function stringToBinary(?string $string): string {
+    if ($string === null) {
+        return '';
     }
 
-    // Return the binary string.
-    return implode(' ', $binary);
+    $binaryString = '';
+    for ($i = 0, $len = strlen($string); $i < $len; $i++) {
+        $binaryString .= sprintf("%08b ", ord($string[$i]));
+    }
+
+    return trim($binaryString);
 }

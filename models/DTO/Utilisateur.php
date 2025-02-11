@@ -2,7 +2,10 @@
 
 class Utilisateur{
     private ?int $idUtilisateur;
-    private ?string $nomUtilisateur, $prenom, $login, $mdp;
+    private ?string $nomUtilisateur;
+    private ?string $prenom;
+    private ?string $login;
+    private ?string $mdp;
 
     /**
      * Constructeur de l'utilisateur en question, ainsi avec les getters et setters.
