@@ -16,9 +16,11 @@
 
             <!-- En cas de clique sur un bouton -->
              <script>
+                 //Une expérience plus pratique pour l'utilisateur (Pourquoi Javascript ? Aucune idée.)
+
                  //Chaque bouton de type "submit"...
                 document.querySelectorAll('button[type="submit"]').forEach(button => {
-                    //On ajoute un
+                    //On ajoute un évènement.
                     button.addEventListener('click', function(e) {
                         const confirmation = confirm('Êtes-vous sûr de vouloir continuer ?');
                         //Validé ?

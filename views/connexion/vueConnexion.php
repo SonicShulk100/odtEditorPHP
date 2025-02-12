@@ -1,5 +1,5 @@
 <?php
-
+//partie PHP
 use Random\RandomException;
 
 if (!isset($_SESSION['csrfToken'])) {
@@ -10,13 +10,15 @@ if (!isset($_SESSION['csrfToken'])) {
     }
 }
 ?>
+
+<!-- Partie HTML -->
 <div class="container">
     <nav>
         <?php require_once "views/haut.php"; ?>
     </nav>
     <section>
         <form action="/index.php?action=connecter" method="post">
-            <label for="login">Nom d'utilisateur : </label>
+            <label for="login">Mail : </label>
             <input type="text" id="login" name="login" required />
             <br>
             <label for="password">Mot de passe :</label>

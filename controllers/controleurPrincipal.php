@@ -9,6 +9,7 @@ require_once "controleurModifierFichier.php";
 require_once "controleurAPropos.php";
 require_once "controleurCreerFichier.php";
 require_once "controleurSupprimerFichier.php";
+require_once "controleurSupprimerCompte.php";
 
 $action = $_GET['action'] ?? "accueil";
 
@@ -55,4 +56,9 @@ switch($action) {
     case "supprimer":
         supprimer();
         break;
+    case "supprimerUtilisateur":
+        supprimerUtilisateur();
+        break;
+    case "supprimerCompte":
+        supprimerCompte();
 }

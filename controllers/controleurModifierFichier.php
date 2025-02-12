@@ -4,6 +4,12 @@
 require_once "models/DAO/FichierDAO.php";
 require_once "models/DTO/Fichier.php";
 
+// Vérification de l'existence de la session ↔ S'il n'existe pas de session...
+if (session_status() === PHP_SESSION_NONE) {
+    // Alors, on en crée une.
+    session_start();
+}
+
 /**
  * Le contrôleur de la modification du fichier ODT.
  * @return void Ici, le contrôleur est sous obligation de ne rien retourner.

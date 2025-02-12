@@ -50,7 +50,7 @@ if ($statutSuppression === 'success') {
                 <th>Contenu du fichier</th>
                 <th>Date de création</th>
                 <th>Date de mise à jour</th>
-                <th>Action</th>
+                <th style="width: 15%;">Actions</th>
             </tr>
             </thead>
             <tbody>
@@ -66,14 +66,18 @@ if ($statutSuppression === 'success') {
                 echo "<td>" . htmlspecialchars($fichier->getCreatedAt()) . "</td>";
                 echo "<td>" . htmlspecialchars($fichier->getUpdatedAt()) . "</td>";
                 echo "<td>
-                        <a href='/index.php?action=modifierFichier&id=" . htmlspecialchars($fichier->getId()) . "'>Modifier</a>
-                        <a href='/index.php?action=supprimerFichier&idFichier=" . htmlspecialchars($fichier->getId()) . "'>Supprimer</a>
+                            <a href='/index.php?action=modifierFichier&id=" . htmlspecialchars($fichier->getId()) . "'>Modifier</a>
+                            <a href='/index.php?action=supprimerFichier&idFichier=" . htmlspecialchars($fichier->getId()) . "'>Supprimer</a>
                       </td>";
                 echo "</tr>";
             }
             ?>
             </tbody>
         </table>
+        <br>
+        <button class="button"><a href="../../index.php?action=supprimerUtilisateur">Supprimer le compte</a></button>
     </section>
-    <?php require_once "views/bas.php"; ?>
+    <?php
+        require_once "views/bas.php";
+    ?>
 </div>

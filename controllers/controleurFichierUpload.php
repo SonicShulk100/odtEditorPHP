@@ -7,6 +7,7 @@ ini_set('display_errors', 1);
 // Importations des fichiers PHP nécessaires.
 require_once 'models/DAO/FichierDAO.php';
 require_once 'utils/ODTToHTMLConverter.php';
+require_once "controllers/controleurCreerFichier.php";
 
 // Vérification de l'existence de la session ↔ S'il n'existe pas de session...
 if (session_status() === PHP_SESSION_NONE) {
@@ -19,8 +20,6 @@ if (session_status() === PHP_SESSION_NONE) {
  * @return void Le contrôleur est sous-obligation de ne rien retourner.
  */
 function fichierUpload(): void {
-    // Instanciation d'un objet PDO (Je ne pense pas que c'est nécessaire, mais ça marche quand-même).
-    $db = new PDO(Param::DSN, Param::USER, Param::PASS);
 
     // Si on n'est pas connecté
     if (!estConnecte()) {
@@ -43,7 +42,7 @@ function fichierUpload(): void {
                 // On récupère le contenu HTML à partir du fichier temporaire, et le fichier binaire.
                 $converter = new ODTToHTMLConverter();
                 $contenuHTML = $converter->convert($fichierTemp);
-                $fichierBinaire = file_get_contents($fichierTemp);
+                $fichierBinaire = stringToBinary($fichierTemp);
 
                 // On crée une occurrence basée sur le nom du fichier, l'ID de l'utilisateur, le contenu HTML et le fichier binaire.
                 $response = FichierDAO::createFichier($nomFichier, $contenuHTML, $diUtilisateur, $fichierBinaire);
@@ -56,6 +55,7 @@ function fichierUpload(): void {
                 }
 
             } catch(Exception $e){
+                //Afficher l'erreur.
                 die(htmlspecialchars($e->getMessage()));
             }
         }

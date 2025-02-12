@@ -8,7 +8,7 @@ require_once "models/DTO/Fichier.php";
  * @return void
  */
 function creerFichier(): void {
-    $idUtilisateur = $_SESSION["idUtilisateur"] ?? false;
+    $idUtilisateur = $_SESSION["idUtilisateur"] ?? null;
 
     if ($idUtilisateur === false) {
         header("Location: index.php?action=utilisateur&erreur=parametres_invalides");
@@ -35,7 +35,7 @@ function enregCreer(): void {
 
     if (isset($_POST["enregistrer"])) {
         $idUtilisateur = filter_input(INPUT_POST, "idUtilisateur", FILTER_VALIDATE_INT);
-        $nomFichier = filter_input(INPUT_POST, "nomFichier", FILTER_SANITIZE_STRING);
+        $nomFichier = htmlspecialchars($_POST["nomFichier"]);
 
         if ($idUtilisateur === false || empty($nomFichier)) {
             $messageErreur = "Paramètres invalides";
@@ -73,12 +73,18 @@ function enregCreer(): void {
  * @return string
  */
 function stringToBinary(?string $string): string {
+    //Rien ?
     if ($string === null) {
+        //Rien.
         return '';
     }
 
+    //Initialisation du string.
     $binaryString = '';
+
+    //Pour chaque caractère dans le string.
     for ($i = 0, $len = strlen($string); $i < $len; $i++) {
+        //On
         $binaryString .= sprintf("%08b ", ord($string[$i]));
     }
 

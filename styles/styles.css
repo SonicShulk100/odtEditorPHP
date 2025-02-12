@@ -29,14 +29,58 @@ Tableau d'utilisateur contenant :
 - la date de création et de mise à jour
 - l'ID de l'utilisateur.
  */
-#tableFichiersODTUtilisateur{
-    border-width: 3px;
-    border-color: black;
-    font-family: "Consolas", "Courier", "Courier New", monospace;
-    border-spacing: 3px;
-    border-collapse: separate;
-    width:100%;
-    table-layout: auto;
+#tableFichiersODTUtilisateur {
+    width: 100%;
+    table-layout: fixed;
+    border-collapse: collapse;
+    overflow-x: auto;
+    display: block;
+    white-space: nowrap;
+}
+
+#tableFichiersODTUtilisateur th,
+#tableFichiersODTUtilisateur td {
+    padding: 10px;
+    text-align: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-wrap: break-word;
+}
+
+/* Ajuster la largeur des colonnes */
+#tableFichiersODTUtilisateur th:nth-child(1),
+#tableFichiersODTUtilisateur td:nth-child(1) {
+    width: 10%;
+}
+
+#tableFichiersODTUtilisateur th:nth-child(2),
+#tableFichiersODTUtilisateur td:nth-child(2) {
+    width: 20%;
+}
+
+#tableFichiersODTUtilisateur th:nth-child(3),
+#tableFichiersODTUtilisateur td:nth-child(3) {
+    width: 30%;
+}
+
+#tableFichiersODTUtilisateur th:nth-child(6),
+#tableFichiersODTUtilisateur td:nth-child(6) {
+    width: 15%;
+}
+
+/* Placer les boutons côte à côte */
+#tableFichiersODTUtilisateur td a {
+    display: inline-block;
+    padding: 5px 10px;
+    background-color: cadetblue;
+    color: black;
+    border-radius: 5px;
+    margin: 2px;
+}
+
+#tableFichiersODTUtilisateur td a:hover {
+    background-color: bisque;
+    color: black;
 }
 
 /*
@@ -96,6 +140,11 @@ Les liens dans le tableau de l'utilisateur.
 
 /*
 Titre de la page.
+Caractéristiques:
+- Centré
+- Consolas en tant que police
+- souligné
+- Couleur Bisqué.
  */
 h2{
     text-align: center;
@@ -127,15 +176,15 @@ Toute l'ensemble de la page.
 }
 
 /*
-La page principal.
+Le corps de la page.
  */
 section{
     flex-grow: 1;
-    padding-bottom: 40px;
+    padding-bottom: 80px;
 }
 
 /*
-Cas de suppression:
+Cas de suppression ou d'ajout:
 - .alertalert-danger si rien ne va
 - .alertalert-success si tout allait bien.
 */
