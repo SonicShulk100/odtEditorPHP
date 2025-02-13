@@ -7,7 +7,7 @@
             <h2>Souhaitez-vous vraiment supprimer le compte ?</h2>
             <br>
             <button type="submit" class="button" name="validation" value="true">OUI</button>
-            <a href="/index.php?action=accueil" class="button">NON</a>
+            <button type="submit" class="button" href="/index.php?action=accueil" value="true">NON</button>
             <script>
                 //Une expérience plus pratique pour l'utilisateur (Pourquoi Javascript ?)
                 document.querySelectorAll('button[name="validation"]').forEach(button => {
@@ -22,4 +22,3 @@
     </section>
     <?php require_once "views/bas.php"; ?>
 </div>
-

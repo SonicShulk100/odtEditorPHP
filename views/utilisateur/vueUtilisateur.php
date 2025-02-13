@@ -22,7 +22,9 @@ if ($statutSuppression === 'success') {
 <!-- Conteneur de la page -->
 <div class="container">
     <nav>
-        <?php require_once "views/haut.php"; ?>
+        <?php
+            require_once "views/haut.php";
+        ?>
     </nav>
     <section>
         <h2>Utilisateur :
@@ -41,39 +43,42 @@ if ($statutSuppression === 'success') {
         }
         ?>
 
-        <!-- Tableau pour les fichiers ODT -->
-        <table id="tableFichiersODTUtilisateur" border="3">
-            <thead>
-            <tr>
-                <th>ID du fichier</th>
-                <th>Nom du fichier</th>
-                <th>Contenu du fichier</th>
-                <th>Date de création</th>
-                <th>Date de mise à jour</th>
-                <th style="width: 15%;">Actions</th>
-            </tr>
-            </thead>
-            <tbody>
-            <?php
-            // Récupération des fichiers de l'utilisateur
-            $fichiers = FichierDAO::getFichiersByIdUtilisateur((int)$_SESSION['idUtilisateur']);
+        <!-- Conteneur pour rendre le tableau responsive -->
+        <div class="table-responsive">
+            <table id="tableFichiersODTUtilisateur">
+                <thead>
+                <tr>
+                    <th>ID du fichier</th>
+                    <th>Nom du fichier</th>
+                    <th>Contenu du fichier</th>
+                    <th>Date de création</th>
+                    <th>Date de mise à jour</th>
+                    <th style="width: 15%;">Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <?php
+                // Récupération des fichiers de l'utilisateur
+                $fichiers = FichierDAO::getFichiersByIdUtilisateur((int)$_SESSION['idUtilisateur']);
 
-            foreach ($fichiers as $fichier) {
-                echo "<tr>";
-                echo "<td>" . htmlspecialchars($fichier->getId()) . "</td>";
-                echo "<td>" . htmlspecialchars($fichier->getNom()) . "</td>";
-                echo "<td>" . htmlspecialchars($fichier->getContenu()) . "</td>";
-                echo "<td>" . htmlspecialchars($fichier->getCreatedAt()) . "</td>";
-                echo "<td>" . htmlspecialchars($fichier->getUpdatedAt()) . "</td>";
-                echo "<td>
-                            <a href='/index.php?action=modifierFichier&id=" . htmlspecialchars($fichier->getId()) . "'>Modifier</a>
-                            <a href='/index.php?action=supprimerFichier&idFichier=" . htmlspecialchars($fichier->getId()) . "'>Supprimer</a>
-                      </td>";
-                echo "</tr>";
-            }
-            ?>
-            </tbody>
-        </table>
+                foreach ($fichiers as $fichier) {
+                    echo "<tr>";
+                    echo "<td>" . htmlspecialchars($fichier->getId()) . "</td>";
+                    echo "<td>" . htmlspecialchars($fichier->getNom()) . "</td>";
+                    echo "<td>" . htmlspecialchars($fichier->getContenu()) . "</td>";
+                    echo "<td>" . htmlspecialchars($fichier->getCreatedAt()) . "</td>";
+                    echo "<td>" . htmlspecialchars($fichier->getUpdatedAt()) . "</td>";
+                    echo "<td>
+                                <a href='/index.php?action=modifierFichier&id=" . htmlspecialchars($fichier->getId()) . "'>Modifier</a>
+                                <a href='/index.php?action=supprimerFichier&idFichier=" . htmlspecialchars($fichier->getId()) . "'>Supprimer</a>
+                            </td>";
+                    echo "</tr>";
+                }
+                ?>
+                </tbody>
+            </table>
+        </div>
+
         <br>
         <button class="button"><a href="../../index.php?action=supprimerUtilisateur">Supprimer le compte</a></button>
     </section>
@@ -81,3 +86,44 @@ if ($statutSuppression === 'success') {
         require_once "views/bas.php";
     ?>
 </div>
+
+<style>
+    /* Assurer que le tableau occupe toute la largeur sans overflow */
+    .table-responsive {
+        width: 100%;
+        display: block;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    th, td {
+        padding: 8px;
+        text-align: left;
+        border: 1px solid #ddd;
+        font-size: 14px; /* Réduction de la taille du texte */
+        word-wrap: break-word; /* Permet au texte de se couper */
+        font-family: "Consolas", "Courier", "Courier New", monospace;
+    }
+
+    th {
+        background-color: #f4f4f4;
+    }
+
+    /* Ajuster la taille des colonnes pour éviter le débordement */
+    td:nth-child(1) { width: 5%; }   /* ID du fichier */
+    td:nth-child(2) { width: 20%; }  /* Nom du fichier */
+    td:nth-child(3) { width: 35%; }  /* Contenu du fichier */
+    td:nth-child(4) { width: 15%; }  /* Date de création */
+    td:nth-child(5) { width: 15%; }  /* Date de mise à jour */
+    td:nth-child(6) { width: 10%; }  /* Actions */
+
+    /* Assurer que le texte long s'affiche correctement */
+    td, th {
+        white-space: normal;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+</style>

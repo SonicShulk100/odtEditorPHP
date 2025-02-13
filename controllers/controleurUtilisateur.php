@@ -15,10 +15,11 @@ function utilisateur(): void
 
 /**
  * Vérifie si l'utilisateur est connecté.
- * @return bool TRUE si connecté, FALSE sinon.
+ * @return bool TRUE si on est connecté, FALSE sinon.
  */
 function estConnecte(): bool
 {
+    //On retourne un booléen qui correspond si on est connecté ou pas.
     return isset($_SESSION['idUtilisateur'], $_SESSION['connecte'])
         && session_status() === PHP_SESSION_ACTIVE
         && $_SESSION['connecte'] === true;
