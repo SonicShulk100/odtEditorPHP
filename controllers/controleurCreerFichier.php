@@ -53,7 +53,10 @@ function enregCreer(): void {
             }
         }
     }
+
+    //Si on a cliqué sur le bouton "Annuler"...
     if(isset($_POST["annuler"])){
+        //Alors, on se dirige vers la page d'utilisateur.
         header("Location: index.php?action=utilisateur&erreur=Annulation_de_la_creation");
         exit();
     }

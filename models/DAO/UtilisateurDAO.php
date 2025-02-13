@@ -37,13 +37,19 @@ class UtilisateurDAO {
         $db = new PDO(Param::DSN, Param::USER, Param::PASS);
 
         try{
+            //Requête SQL
             $SQL = "SELECT * FROM utilisateur WHERE idUtilisateur = ?";
 
+            //Préparation de la requête SQL
             $stmt = $db->prepare($SQL);
+
+            //Exécution de la requête SQL
             $stmt->execute([$idUtilisateur]);
 
+            //Initialisation de l'utilisateur en tant que liste.
             $utilisateur = [];
 
+            //Création de l'utilisateur.
             while($row = $stmt->fetch(PDO::FETCH_ASSOC)){
                 $utilisateur[] = new Utilisateur(
                     $row["idUtilisateur"],
@@ -54,6 +60,7 @@ class UtilisateurDAO {
                 );
             }
 
+            //Retourne l'utilisateur.
             return $utilisateur;
         }
         catch(PDOException $e){
@@ -113,7 +120,7 @@ class UtilisateurDAO {
             //Execution de la requête avec les paramètres.
             $stmt->execute([$nom, $prenom, $login, $mdp]);
 
-            //Committer
+            //Fin de la transaction.
             return $db->commit();
         }
         catch(PDOException $e){
@@ -141,17 +148,17 @@ class UtilisateurDAO {
             $db->beginTransaction();
 
             //Requête SQL
-            $sql = "UPDATE utilisateur SET nom = ?, prenom = ?, login = ?, mdp = md5(?) WHERE idUtilisateur = ?";
+            $sql = "UPDATE utilisateur SET nom = :nom, prenom = :prenom, login = :login, mdp = md5(:mdp) WHERE idUtilisateur = :id";
 
             //Préparation de la requête
             $stmt = $db->prepare($sql);
 
-            //Mise en place des paramètres
-            $stmt->bindParam(1, $idUtilisateur);
-            $stmt->bindParam(2, $nom);
-            $stmt->bindParam(3, $prenom);
-            $stmt->bindParam(4, $login);
-            $stmt->bindParam(5, $mdp);
+            //Mise en place des paramètres.
+            $stmt->bindParam(":id", $idUtilisateur);
+            $stmt->bindParam(":nom", $nom);
+            $stmt->bindParam(":prenom", $prenom);
+            $stmt->bindParam(":login", $login);
+            $stmt->bindParam(":mdp", $mdp);
 
             //Execution de la requête
             $stmt->execute();
