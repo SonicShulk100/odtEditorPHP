@@ -1,4 +1,6 @@
 <?php
+require_once __DIR__ . "/../Param.php";
+require_once __DIR__ . "/../DTO/Fichier.php";
 class FichierDAO {
     /**
      * Récupération du fichier en question dans la base de données.

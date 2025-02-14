@@ -71,6 +71,7 @@ if ($statutSuppression === 'success') {
                     echo "<td>
                                 <a href='/index.php?action=modifierFichier&id=" . htmlspecialchars($fichier->getId()) . "'>Modifier</a>
                                 <a href='/index.php?action=supprimerFichier&idFichier=" . htmlspecialchars($fichier->getId()) . "'>Supprimer</a>
+                                <a href='/controllers/controleurTelechargerODT.php?idFichier=". htmlspecialchars($fichier->getId()) ."' target='_blank'>Télécharger ODT</a>
                             </td>";
                     echo "</tr>";
                 }

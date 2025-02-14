@@ -33,28 +33,38 @@ function fichierUpload(): void {
         // On récupère le nom du fichier et l'ID de l'utilisateur.
         $nomFichier = $_FILES["fileUpload"]["name"];
         $fichierTemp = $_FILES["fileUpload"]["tmp_name"];
-        $diUtilisateur = $_SESSION["idUtilisateur"];
+        $idUtilisateur = $_SESSION["idUtilisateur"];
 
         //Si le fichier temporaire existe...
-        if ($fichierTemp){
+        if ($fichierTemp && is_uploaded_file($fichierTemp)) {
             // On fait un Try-Catch pour gérer les erreurs.
-            try{
-                // On récupère le contenu HTML à partir du fichier temporaire, et le fichier binaire.
+            try {
+                // Lire le contenu réel du fichier avant conversion en binaire
+                $contenuFichier = file_get_contents($fichierTemp);
+
+                // Vérifier que le fichier a bien été lu
+                if ($contenuFichier === false) {
+                    throw new RuntimeException("Erreur lors de la lecture du fichier.");
+                }
+
+                // On récupère le contenu HTML à partir du fichier temporaire
                 $converter = new ODTToHTMLConverter();
                 $contenuHTML = $converter->convert($fichierTemp);
-                $fichierBinaire = stringToBinary($fichierTemp);
+
+                // Convertir le contenu réel du fichier en binaire
+                $fichierBinaire = stringToBinary($contenuFichier);
 
                 // On crée une occurrence basée sur le nom du fichier, l'ID de l'utilisateur, le contenu HTML et le fichier binaire.
-                $response = FichierDAO::createFichier($nomFichier, $contenuHTML, $diUtilisateur, $fichierBinaire);
+                $response = FichierDAO::createFichier($nomFichier, $contenuHTML, $idUtilisateur, $fichierBinaire);
 
                 // Si on a bien créé une occurrence...
-                if($response){
+                if ($response) {
                     // Alors, on se dirige dans la page de l'utilisateur en question.
                     header("Location: index.php?action=utilisateur");
                     exit();
                 }
 
-            } catch(Exception $e){
+            } catch (Exception $e) {
                 //Afficher l'erreur.
                 die(htmlspecialchars($e->getMessage()));
             }
