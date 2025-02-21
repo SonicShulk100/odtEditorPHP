@@ -199,3 +199,9 @@ Cas de suppression ou d'ajout:
     color:darkblue;
     font-size: 25px;
 }
+
+#editionFichier, #contenuFichier{
+    align-content: center;
+    font-size: medium;
+    display: inline-flex;
+}

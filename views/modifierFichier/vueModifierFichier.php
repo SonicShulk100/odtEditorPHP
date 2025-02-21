@@ -26,6 +26,8 @@ if ($idFichier) {
                 <?php echo htmlspecialchars($fichier->getContenu()); ?>
             </textarea>
 
+            <br>
+
             <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
             <script src="https://cdn.jsdelivr.net/npm/jodit@latest/es2021/jodit.fat.min.js"></script>
 
@@ -48,6 +50,7 @@ if ($idFichier) {
             </script>
 
             <br>
+
             <button type="submit" class="button" id="enregistrer">Enregistrer les modifications</button>
             <button type="submit" class="button" id="annuler">Annuler</button>
         </form>
