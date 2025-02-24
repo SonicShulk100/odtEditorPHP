@@ -17,4 +17,13 @@ if(session_status() === PHP_SESSION_NONE){
         <button class="button"><a href="../index.php?action=inscription">S'inscrire</a></button>
         <button class="button"><a href="../index.php?action=connecter">Se connecter</a></button>
     <?php endif; ?>
+    <hr>
 </div>
+
+<style>
+    hr{
+        height: 5px;
+        border: none;
+        background-color: deeppink;
+    }
+</style>

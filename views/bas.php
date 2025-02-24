@@ -1,4 +1,5 @@
 <footer>
+    <hr>
     <ul class="present">
         <li>Créé par : Romain MOUROUVIN</li>
         <li>|</li>
@@ -9,3 +10,9 @@
         <li>Option : SLAM</li>
     </ul>
 </footer>
+
+<style>
+    footer{
+        background: mediumslateblue;
+    }
+</style>

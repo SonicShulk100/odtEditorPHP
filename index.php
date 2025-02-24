@@ -16,6 +16,15 @@ if(!isset($_SESSION)){
         <link href="https://cdn.jsdelivr.net/npm/jodit@latest/es2021/jodit.fat.min.css" rel="stylesheet" type="text/css"/>
     </head>
     <body>
+        <h1 class="titre">Editeur d'ODT - Un Projet de stage de deuxième année de BTS - SIO Option SLAM</h1>
         <?php require_once "controllers/controleurPrincipal.php";?>
     </body>
 </html>
+
+<style>
+    .titre{
+        justify-content: center;
+        font-family: "Consolas", "Courier", "Courier New", monospace;
+
+    }
+</style>
