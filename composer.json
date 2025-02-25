@@ -6,7 +6,8 @@
       "ext-libxml": "*",
       "ext-zip": "*",
       "ext-fileinfo": "*",
-      "ext-dom": "*"
+      "ext-dom": "*",
+      "ext-pdo": "*"
     }
     ,
     "require-dev": {

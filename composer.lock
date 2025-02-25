@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "385086090668d19fcffa53eaac77236c",
+    "content-hash": "8366b48dd177784f93334c792d634852",
     "packages": [
         {
             "name": "phpoffice/math",
@@ -116,7 +116,7 @@
                 {
                     "name": "Gabriel Bull",
                     "email": "me@gabrielbull.com",
-                    "homepage": "https://gabrielbull.com/"
+                    "homepage": "http://gabrielbull.com/"
                 },
                 {
                     "name": "Franck Lefevre",
@@ -124,11 +124,11 @@
                 },
                 {
                     "name": "Ivan Lanin",
-                    "homepage": "https://ivan.lanin.org"
+                    "homepage": "http://ivan.lanin.org"
                 },
                 {
                     "name": "Roman Syroeshko",
-                    "homepage": "https://ru.linkedin.com/pub/roman-syroeshko/34/a53/994/"
+                    "homepage": "http://ru.linkedin.com/pub/roman-syroeshko/34/a53/994/"
                 },
                 {
                     "name": "Antoine de Troostembergh"
@@ -407,16 +407,16 @@
         },
         {
             "name": "phpunit/php-code-coverage",
-            "version": "12.0.3",
+            "version": "12.0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/php-code-coverage.git",
-                "reference": "2e3038bff41d56114e5396151060f5ac9d2d6751"
+                "reference": "79e5ef5897068689c7c325554d6df905480ce942"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/2e3038bff41d56114e5396151060f5ac9d2d6751",
-                "reference": "2e3038bff41d56114e5396151060f5ac9d2d6751",
+                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/79e5ef5897068689c7c325554d6df905480ce942",
+                "reference": "79e5ef5897068689c7c325554d6df905480ce942",
                 "shasum": ""
             },
             "require": {
@@ -472,7 +472,7 @@
             "support": {
                 "issues": "https://github.com/sebastianbergmann/php-code-coverage/issues",
                 "security": "https://github.com/sebastianbergmann/php-code-coverage/security/policy",
-                "source": "https://github.com/sebastianbergmann/php-code-coverage/tree/12.0.3"
+                "source": "https://github.com/sebastianbergmann/php-code-coverage/tree/12.0.4"
             },
             "funding": [
                 {
@@ -480,7 +480,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-02-18T14:04:13+00:00"
+            "time": "2025-02-25T13:27:48+00:00"
         },
         {
             "name": "phpunit/php-file-iterator",
@@ -729,16 +729,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "12.0.4",
+            "version": "12.0.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "e469daf4e173c4b7f2d6154d364f468f3713f632"
+                "reference": "0f177d7316ba155d36337c3811b11993b54dae32"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/e469daf4e173c4b7f2d6154d364f468f3713f632",
-                "reference": "e469daf4e173c4b7f2d6154d364f468f3713f632",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/0f177d7316ba155d36337c3811b11993b54dae32",
+                "reference": "0f177d7316ba155d36337c3811b11993b54dae32",
                 "shasum": ""
             },
             "require": {
@@ -806,7 +806,7 @@
             "support": {
                 "issues": "https://github.com/sebastianbergmann/phpunit/issues",
                 "security": "https://github.com/sebastianbergmann/phpunit/security/policy",
-                "source": "https://github.com/sebastianbergmann/phpunit/tree/12.0.4"
+                "source": "https://github.com/sebastianbergmann/phpunit/tree/12.0.5"
             },
             "funding": [
                 {
@@ -822,7 +822,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-02-21T06:10:40+00:00"
+            "time": "2025-02-25T06:13:04+00:00"
         },
         {
             "name": "roave/security-advisories",
@@ -830,12 +830,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/SecurityAdvisories.git",
-                "reference": "23b2141a1db97b4e3278510ed9e74a16361619b1"
+                "reference": "cebd36660068b236b35789228f183f296bcccaee"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/23b2141a1db97b4e3278510ed9e74a16361619b1",
-                "reference": "23b2141a1db97b4e3278510ed9e74a16361619b1",
+                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/cebd36660068b236b35789228f183f296bcccaee",
+                "reference": "cebd36660068b236b35789228f183f296bcccaee",
                 "shasum": ""
             },
             "conflict": {
@@ -1226,7 +1226,7 @@
                 "mojo42/jirafeau": "<4.4",
                 "mongodb/mongodb": ">=1,<1.9.2",
                 "monolog/monolog": ">=1.8,<1.12",
-                "moodle/moodle": "<4.3.8|>=4.4,<4.4.4",
+                "moodle/moodle": "<4.3.10|>=4.4,<4.4.6|>=4.5.0.0-beta,<4.5.2",
                 "mos/cimage": "<0.7.19",
                 "movim/moxl": ">=0.8,<=0.10",
                 "movingbytes/social-network": "<=1.2.1",
@@ -1698,7 +1698,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-02-21T23:05:15+00:00"
+            "time": "2025-02-24T22:04:57+00:00"
         },
         {
             "name": "sebastian/cli-parser",
@@ -2629,7 +2629,8 @@
         "ext-libxml": "*",
         "ext-zip": "*",
         "ext-fileinfo": "*",
-        "ext-dom": "*"
+        "ext-dom": "*",
+        "ext-pdo": "*"
     },
     "platform-dev": [],
     "plugin-api-version": "2.6.0"
