@@ -4,6 +4,10 @@ require_once "utils/CSSHandler.php";
 require_once "utils/CSS/FontCSSHandler.php";
 require_once "utils/CSS/ParagraphCSSHandler.php";
 require_once "utils/CSS/TableCSSHandler.php";
+require_once "utils/CSS/HeadingStyleHandler.php";
+require_once "utils/CSS/ImageCSSHandler.php";
+require_once "utils/CSS/LinkCSSHandler.php";
+require_once "utils/CSS/ListCSSHandler.php";
 
 class ODTToCSSConverter{
 

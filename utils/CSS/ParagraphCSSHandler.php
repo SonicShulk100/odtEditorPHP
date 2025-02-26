@@ -25,7 +25,7 @@ class ParagraphCSSHandler implements CSSHandler{
             $marginRight = (string)($style->xpath("style:paragraph-properties/@fo:margin-right")[0] ?? "0");
             $marginBottom = (string)($style->xpath("style:paragraph-properties/@fo:margin-bottom")[0] ?? "0");
 
-            $css[] = ".$name {margin-top : $marginTop; margin-left : $marginLeft; margin-right: $marginRight; margin-bottom: $marginBottom}";
+            $css[] = ".$name { margin-top : $marginTop; margin-left : $marginLeft; margin-right: $marginRight; margin-bottom: $marginBottom }";
 
         }
 

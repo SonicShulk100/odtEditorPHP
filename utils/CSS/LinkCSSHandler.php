@@ -1,6 +1,6 @@
 <?php
 
-require_once "utils/CSS";
+require_once "utils/CSSHandler.php";
 
 class LinkCSSHandler implements CSSHandler{
     private ?CSSHandler $nextHandler = null;

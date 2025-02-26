@@ -6,7 +6,7 @@ ini_set('display_errors', 1);
 
 // Importations des fichiers PHP nécessaires.
 require_once 'models/DAO/FichierDAO.php';
-require_once 'utils/ODTToHTMLConverter.php';
+require_once 'utils/ODTToFullConverter.php';
 require_once "controllers/controleurCreerFichier.php";
 
 // Vérification de l'existence de la session ↔ S'il n'existe pas de session...
@@ -47,15 +47,16 @@ function fichierUpload(): void {
                     throw new RuntimeException("Erreur lors de la lecture du fichier.");
                 }
 
-                // On récupère le contenu HTML à partir du fichier temporaire
-                $converter = new ODTToHTMLConverter();
-                $contenuHTML = $converter->convert($fichierTemp);
+                // On récupère le contenu HTML et CSS à partir du fichier temporaire
+                $converter = new ODTToFullConverter();
+                $contenuHTML = $converter->convertToHTML($fichierTemp);
+                $contenuCSS = $converter->convertToCSS($fichierTemp);
 
                 // Convertir le contenu réel du fichier en binaire
                 $fichierBinaire = stringToBinary($contenuFichier);
 
-                // On crée une occurrence basée sur le nom du fichier, l'ID de l'utilisateur, le contenu HTML et le fichier binaire.
-                $response = FichierDAO::createFichier($nomFichier, $contenuHTML, $idUtilisateur, $fichierBinaire);
+                // On crée une occurrence basée sur le nom du fichier, l'ID de l'utilisateur, le contenu HTML, le CSS et le fichier binaire.
+                $response = FichierDAO::createFichier($nomFichier, $contenuHTML . $contenuCSS, $idUtilisateur, $fichierBinaire);
 
                 // Si on a bien créé une occurrence...
                 if ($response) {

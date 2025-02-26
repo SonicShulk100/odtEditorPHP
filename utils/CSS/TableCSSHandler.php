@@ -1,6 +1,6 @@
 <?php
 
-require_once "utils/CSS";
+require_once "utils/CSSHandler.php";
 
 class TableCSSHandler implements CSSHandler
 {
@@ -22,7 +22,7 @@ class TableCSSHandler implements CSSHandler
     {
         foreach($XML->xpath("//style:default-style[@style:family='table']") as $style){
             $borderModel = (string) ($style->xpath('style:table-properties/@table:border-model') ?? "separate");
-            $css[] = "table {border-collapse : " . ($borderModel === "collapsing" ? "collapse" : "separate") . ";}";
+            $css[] = "table { border-collapse : " . ($borderModel === "collapsing" ? "collapse" : "separate") . "; }";
         }
 
         $this->nextHandler?->handle($XML, $css);

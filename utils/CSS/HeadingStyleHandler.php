@@ -25,7 +25,7 @@ class HeadingStyleHandler implements CSSHandler{
             $name = (string) $style["style:name"];
             $fontSize = (string) ($style->xpath("style:text/@fo:font-size")[0] ?? "inherit");
             if(str_contains(strtolower($name), "heading")){
-                $css[] = ".$name { font-size : $fontSize; font-weight: bold; }";
+                $css[] = ".$name { font-size: $fontSize; font-weight: bold; }";
             }
         }
 
