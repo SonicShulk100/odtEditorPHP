@@ -8,5 +8,6 @@
             <p>Ceci est un projet conçu en stage de deuxième année de BTS - SIO avec option SLAM</p>
         </div>
     </section>
+    <hr>
     <?php require_once "views/bas.php"; ?>
 </div>

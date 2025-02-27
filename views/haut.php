@@ -24,6 +24,9 @@ if(session_status() === PHP_SESSION_NONE){
     hr{
         height: 5px;
         border: none;
-        background-color: deeppink;
+        background-color: darkblue;
+    }
+    .header{
+        justify-items: center;
     }
 </style>

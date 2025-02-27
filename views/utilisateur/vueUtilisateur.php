@@ -84,6 +84,7 @@ if ($statutSuppression === 'success') {
         <button class="button"><a href="../../index.php?action=supprimerUtilisateur">Supprimer le compte</a></button>
         <button class="button"><a href="../../index.php?action=modifierCompte">Modifier le compte</a></button>
     </section>
+    <hr>
     <?php
         require_once "views/bas.php";
     ?>

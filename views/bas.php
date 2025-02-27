@@ -13,6 +13,6 @@
 
 <style>
     footer{
-        background: mediumslateblue;
+        background: darkcyan;
     }
 </style>

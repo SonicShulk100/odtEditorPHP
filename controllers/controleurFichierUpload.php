@@ -49,14 +49,13 @@ function fichierUpload(): void {
 
                 // On récupère le contenu HTML et CSS à partir du fichier temporaire
                 $converter = new ODTToFullConverter();
-                $contenuHTML = $converter->convertToHTML($fichierTemp);
-                $contenuCSS = $converter->convertToCSS($fichierTemp);
+                $contenuHTML = $converter->convert($fichierTemp);
 
                 // Convertir le contenu réel du fichier en binaire
                 $fichierBinaire = stringToBinary($contenuFichier);
 
                 // On crée une occurrence basée sur le nom du fichier, l'ID de l'utilisateur, le contenu HTML, le CSS et le fichier binaire.
-                $response = FichierDAO::createFichier($nomFichier, $contenuHTML . $contenuCSS, $idUtilisateur, $fichierBinaire);
+                $response = FichierDAO::createFichier($nomFichier, $contenuHTML, $idUtilisateur, $fichierBinaire);
 
                 // Si on a bien créé une occurrence...
                 if ($response) {
