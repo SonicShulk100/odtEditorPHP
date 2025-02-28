@@ -25,6 +25,7 @@ if(!isset($_SESSION)){
     .titre{
         justify-content: center;
         font-family: "Consolas", "Courier", "Courier New", monospace;
-
+        text-decoration: underline;
+        color: #40195b;
     }
 </style>

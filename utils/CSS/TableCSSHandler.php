@@ -21,7 +21,7 @@ class TableCSSHandler implements CSSHandler
     #[Override] public function handle(SimpleXMLElement $XML, array &$css): void
     {
         foreach($XML->xpath("//style:default-style[@style:family='table']") as $style){
-            $borderModel = (string) ($style->xpath('style:table-properties/@table:border-model')[0] ?? "separate");
+            $borderModel = (string) ($style->xpath('style:table-properties/@table:border-model')[1] ?? "separate");
             $css[] = "table { border-collapse: " . ($borderModel === "collapsing" ? "collapse" : "separate") . "; }";
         }
 

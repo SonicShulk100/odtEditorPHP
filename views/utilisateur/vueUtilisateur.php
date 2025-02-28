@@ -100,12 +100,13 @@ if ($statutSuppression === 'success') {
     table {
         width: 100%;
         border-collapse: collapse;
+        border-radius: 18px;
     }
 
     th, td {
         padding: 8px;
         text-align: left;
-        border: 1px solid #ddd;
+        border: 5px solid #DDDDDD;
         font-size: 14px; /* Réduction de la taille du texte */
         word-wrap: break-word; /* Permet au texte de se couper */
         font-family: "Consolas", "Courier", "Courier New", monospace;

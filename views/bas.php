@@ -14,5 +14,6 @@
 <style>
     footer{
         background: darkcyan;
+        font-family: "Consolas", "Courier", "Courier New", monospace;
     }
 </style>

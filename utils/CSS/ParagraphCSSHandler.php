@@ -20,10 +20,10 @@ class ParagraphCSSHandler implements CSSHandler{
     {
         foreach ($XML->xpath("//style:style[style:family=pargraph]") as $style) {
             $name = (string)$style["style:name"];
-            $marginTop = (string)($style->xpath("style:paragraph-properties/@fo:margin-top")[0] ?? "0");
-            $marginLeft = (string)($style->xpath("style:paragraph-properties/@fo:margin-left")[0] ?? "0");
-            $marginRight = (string)($style->xpath("style:paragraph-properties/@fo:margin-right")[0] ?? "0");
-            $marginBottom = (string)($style->xpath("style:paragraph-properties/@fo:margin-bottom")[0] ?? "0");
+            $marginTop = (string)($style->xpath("style:paragraph-properties/@fo:margin-top")[1] ?? "0");
+            $marginLeft = (string)($style->xpath("style:paragraph-properties/@fo:margin-left")[1] ?? "0");
+            $marginRight = (string)($style->xpath("style:paragraph-properties/@fo:margin-right")[1] ?? "0");
+            $marginBottom = (string)($style->xpath("style:paragraph-properties/@fo:margin-bottom")[1] ?? "0");
 
             $css[] = ".$name { margin-top : $marginTop; margin-left : $marginLeft; margin-right: $marginRight; margin-bottom: $marginBottom }";
 
