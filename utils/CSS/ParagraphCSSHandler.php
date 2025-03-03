@@ -18,19 +18,19 @@ class ParagraphCSSHandler implements CSSHandler{
     #[Override]
     public function handle(SimpleXMLElement $XML, array &$css): void
     {
-        foreach ($XML->xpath("//style:style[style:family=pargraph]") as $style) {
+        $existingParagraphs = [];
+        foreach ($XML->xpath("//style:style[style:family='paragraph']") as $style) {
             $name = (string)$style["style:name"];
-            $marginTop = (string)($style->xpath("style:paragraph-properties/@fo:margin-top")[1] ?? "0");
-            $marginLeft = (string)($style->xpath("style:paragraph-properties/@fo:margin-left")[1] ?? "0");
-            $marginRight = (string)($style->xpath("style:paragraph-properties/@fo:margin-right")[1] ?? "0");
-            $marginBottom = (string)($style->xpath("style:paragraph-properties/@fo:margin-bottom")[1] ?? "0");
-
-            $css[] = ".$name { margin-top : $marginTop; margin-left : $marginLeft; margin-right: $marginRight; margin-bottom: $marginBottom }";
-
+            $marginTop = (string)($style->xpath("style:paragraph-properties/@fo:margin-top")[0] ?? "0");
+            $marginLeft = (string)($style->xpath("style:paragraph-properties/@fo:margin-left")[0] ?? "0");
+            $marginRight = (string)($style->xpath("style:paragraph-properties/@fo:margin-right")[0] ?? "0");
+            $marginBottom = (string)($style->xpath("style:paragraph-properties/@fo:margin-bottom")[0] ?? "0");
+            $paragraphRule = ".$name { margin-top: $marginTop; margin-left: $marginLeft; margin-right: $marginRight; margin-bottom: $marginBottom; }";
+            if (!in_array($paragraphRule, $existingParagraphs, true)) {
+                $css[] = $paragraphRule;
+                $existingParagraphs[] = $paragraphRule;
+            }
         }
-
         $this->nextHandler?->handle($XML, $css);
-
-        // TODO: Implement handle() method.
     }
 }

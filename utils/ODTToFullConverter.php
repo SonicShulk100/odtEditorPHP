@@ -25,7 +25,7 @@ require_once "utils/CSS/ListCSSHandler.php";
 class ODTToFullConverter
 {
     private DocumentStructureHandler $htmlHandler;
-    private FontCSSHandler $cssHandler;
+    private CSSHandler $cssHandler;
 
     public function __construct()
     {
@@ -80,7 +80,7 @@ class ODTToFullConverter
         $xml = new SimpleXMLElement($stylesXML);
         $cssArray = [];
         $this->cssHandler->handle($xml, $cssArray);
-        $css = implode("\n", $cssArray);
+        $css = implode("\n", array_unique($cssArray)); // Ensure unique CSS rules
 
         return $this->injectCSSIntoHTML($htmlContent, $css);
     }
