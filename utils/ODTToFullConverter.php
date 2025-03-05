@@ -1,6 +1,6 @@
 <?php
 
-//Importations des classes nécessaires pour HTML
+// Importations des classes nécessaires pour HTML
 require_once 'Handler.php';
 require_once 'HTML/ImageHandler.php';
 require_once 'HTML/ParagraphHandler.php';
@@ -12,7 +12,7 @@ require_once "HTML/HeadingHandler.php";
 require_once "HTML/DocumentStructureHandler.php";
 require_once "HTML/LinkHandler.php";
 
-//Importations des classes nécessaires pour CSS
+// Importations des classes nécessaires pour CSS
 require_once "utils/CSSHandler.php";
 require_once "utils/CSS/FontCSSHandler.php";
 require_once "utils/CSS/ParagraphCSSHandler.php";
@@ -57,13 +57,14 @@ class ODTToFullConverter
     }
 
     /**
-     * @throws RunTimeException|Exception
+     * @param string $odtFilePath the path to the ODT file
+     * @throws RuntimeException|Exception in case of error.
+     * @return string the HTML content
      */
     public function convert(string $odtFilePath): string
     {
         $zip = new ZipArchive();
-        if ($zip->open($odtFilePath) !== TRUE) {
-            $zip->close();
+        if ($zip->open($odtFilePath) !== true) {
             throw new RuntimeException("Could not open ODT file.");
         }
 
@@ -72,6 +73,8 @@ class ODTToFullConverter
             $zip->close();
             throw new RuntimeException("Could not extract content.xml from ODT File");
         }
+
+        $contentXML = mb_convert_encoding($contentXML, 'UTF-8', 'auto');
 
         $images = [];
         $htmlContent = $this->htmlHandler->handle($contentXML, $zip, $images);
@@ -82,10 +85,19 @@ class ODTToFullConverter
             throw new RuntimeException("Could not extract styles.xml from ODT File");
         }
 
-        $xml = new SimpleXMLElement($stylesXML);
+        try {
+            $xml = new SimpleXMLElement($stylesXML);
+        } catch (Exception $e) {
+            $zip->close();
+            throw new RuntimeException("Invalid styles.xml content: " . $e->getMessage());
+        }
+
         $cssArray = [];
         $this->cssHandler->handle($xml, $cssArray);
-        $css = implode("\n", array_unique($cssArray)); // Ensure unique CSS rules
+        $cssArray = array_keys(array_flip($cssArray)); // Ensure unique CSS rules efficiently
+        $css = implode("\n", $cssArray);
+
+        $zip->close();
 
         return $this->injectCSSIntoHTML($htmlContent, $css);
     }
@@ -95,27 +107,22 @@ class ODTToFullConverter
         $styleTag = "<style>\n$css\n</style>";
 
         if (is_string($html)) {
-            // Check if there's an existing <style> tag and replace it
             if (str_contains($html, '<style>')) {
-                return preg_replace('/<style>.*?<\/style>/s', $styleTag, $html);
+                return preg_replace('/<style\b[^>]*>.*?<\/style>/si', $styleTag, $html);
             }
-
-            // Inject CSS into <head> if no <style> tag exists
             return preg_replace('/(<head>)/i', "$1\n$styleTag", $html, 1);
         }
 
         if (is_array($html)) {
             $styleInjected = false;
             foreach ($html as $key => $value) {
-                // Check if there's an existing <style> tag and replace it
                 if (is_string($value) && str_contains($value, '<style>')) {
-                    $html[$key] = preg_replace('/<style>.*?<\/style>/s', $styleTag, $value);
+                    $html[$key] = preg_replace('/<style\b[^>]*>.*?<\/style>/si', $styleTag, $value);
                     $styleInjected = true;
                     break;
                 }
             }
 
-            // Inject CSS into <head> if no <style> tag exists
             if (!$styleInjected) {
                 foreach ($html as $key => $value) {
                     if (is_string($value) && str_contains($value, '<head>')) {
@@ -124,10 +131,10 @@ class ODTToFullConverter
                     }
                 }
             }
-
             return $html;
         }
 
         return $html;
     }
 }
+
