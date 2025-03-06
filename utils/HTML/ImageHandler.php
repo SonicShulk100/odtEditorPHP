@@ -4,13 +4,6 @@
 require_once 'utils/Handler.php';
 
 class ImageHandler extends Handler {
-    /**
-     * Gère la conversion des images
-     * @param $content
-     * @param ZipArchive $zip
-     * @param $images
-     * @return array|mixed|string|string[]|null la nouvelle valeur de content
-     */
     public function handle($content, ZipArchive $zip, &$images): mixed
     {
         // Handle image conversion
