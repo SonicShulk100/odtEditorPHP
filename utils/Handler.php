@@ -1,22 +1,19 @@
 <?php
 
-/**
- * Classe abstraite Handler
- * @subclasses ParagraphHandler, ListHandler, TableHandler, HeaderFooterHandler, ImageHandler, StyleHandler, FontHandler, MarginHandler
- */
+abstract class Handler
+{
+    protected ?Handler $handler = null;
 
-abstract class Handler {
-    protected $nextHandler;
+    public function setNext(Handler $handler): Handler
+    {
+        $this->handler = $handler;
 
-    public function setNext(Handler $handler): Handler {
-        $this->nextHandler = $handler;
         return $handler;
     }
 
-    public function handle($content, ZipArchive $zip, &$images) {
-        if ($this->nextHandler) {
-            return $this->nextHandler->handle($content, $zip, $images);
-        }
-        return $content;
+    public function handle($request): ?string
+    {
+        return $this->handler?->handle($request);
+
     }
 }
