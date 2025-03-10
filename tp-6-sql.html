@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="fr-FR">
+	<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta charset="utf-8" />
+		<title>
+		</title>
+		<style>
+			body { line-height:115%; widows:0; orphans:0; font-family:Calibri; font-size:12pt }
+			p { margin:0pt 0pt 10pt }
+			li { margin-top:0pt; margin-bottom:10pt }
+			.BalloonText { margin-top:0pt; margin-bottom:0pt; line-height:normal; widows:0; orphans:0; font-family:Tahoma; font-size:8pt }
+			.Caption { margin-top:6pt; margin-bottom:6pt; line-height:115%; widows:0; orphans:0; font-size:12pt; font-style:italic }
+			.Footer { margin-top:0pt; margin-bottom:0pt; line-height:normal; widows:0; orphans:0; font-size:11pt }
+			.Header { margin-top:0pt; margin-bottom:0pt; line-height:normal; widows:0; orphans:0; font-size:11pt }
+			.HeaderandFooter { margin-top:0pt; margin-bottom:10pt; line-height:115%; widows:0; orphans:0; font-size:11pt }
+			.Heading { margin-top:12pt; margin-bottom:6pt; page-break-after:avoid; line-height:115%; widows:0; orphans:0; font-family:Arial; font-size:14pt }
+			.Index { margin-top:0pt; margin-bottom:10pt; line-height:115%; widows:0; orphans:0; font-size:11pt }
+			.List { margin-top:0pt; margin-bottom:6pt; line-height:115%; widows:0; orphans:0; font-size:11pt }
+			.ListParagraph { margin:0pt 0pt 10pt 36pt; text-indent:0pt; line-height:115%; widows:0; orphans:0; font-size:11pt }
+			.NormalWeb { margin-top:5pt; margin-bottom:5pt; line-height:normal; widows:0; orphans:0; font-family:'Times New Roman'; font-size:12pt }
+			.Standard { margin-top:0pt; margin-bottom:10pt; line-height:115%; widows:0; orphans:0; font-size:11pt }
+			.Textbody { margin-top:0pt; margin-bottom:6pt; line-height:115%; widows:0; orphans:0; font-size:11pt }
+			span.TextedebullesCar { font-family:Tahoma; font-size:8pt }
+			.awlist1 { list-style:none; counter-reset:awlistcounter2_0 }
+			.awlist1 > li:before { content:'-'; counter-increment:awlistcounter2_0 }
+			.awlist2 { list-style:none; counter-reset:awlistcounter4_1 }
+			.awlist2 > li:before { content:'1.' counter(awlistcounter4_1); counter-increment:awlistcounter4_1 }
+			.awlist3 { list-style:none; counter-reset:awlistcounter7_1 4 }
+			.awlist3 > li:before { content:'1.' counter(awlistcounter7_1); counter-increment:awlistcounter7_1 }
+@media (max-width: 900px) { 
+img { 
+   max-width: 100%;
+   height: auto;
+}
+
+.table-container {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+td, th {
+    padding: 8px;
+    text-align: left;
+    border: 1px solid #ddd;
+}
+}	
+
+
+		</style>
+	</head>
+	<body>
+		<div>
+			<p class="Standard" style="line-height:115%; border:0.75pt solid #00000a; padding:1pt 4pt; font-size:14pt">
+				<strong>SIO 2B </strong><strong><span style="width:29.71pt; display:inline-block">&#xa0;</span></strong><strong><span style="width:35.4pt; display:inline-block">&#xa0;</span></strong><strong><span style="width:35.4pt; display:inline-block">&#xa0;</span></strong><strong><span style="width:35.4pt; display:inline-block">&#xa0;</span></strong><strong>&#xa0;&#xa0;&#xa0;&#xa0; </strong><strong>DA 1-3</strong><strong><span style="width:16.02pt; display:inline-block">&#xa0;</span></strong><strong><span style="width:35.4pt; display:inline-block">&#xa0;</span></strong><strong><span style="width:35.4pt; display:inline-block">&#xa0;</span></strong><strong><span style="width:35.4pt; display:inline-block">&#xa0;</span></strong><strong><span style="width:35.4pt; display:inline-block">&#xa0;</span></strong><strong>&#xa0;&#xa0;&#xa0;&#xa0;&#xa0; </strong><strong>Cours - TP</strong>
+			</p>
+			<p class="Standard" style="margin-left:283.2pt; text-indent:35.4pt">
+				<em>&#xa0;&#xa0;&#xa0; </em><em>Thème</em><em>&#xa0;</em><em>: SQL</em><em>&#xa0;</em><em>- jointures externes</em>
+			</p>
+			<p class="Standard" style="line-height:115%; font-size:14pt">
+				<strong><u>Cas AMAP</u></strong>
+			</p>
+			<p class="Standard" style="line-height:115%; font-size:12pt">
+				<strong><u>Partie 1</u></strong><strong><u>&#xa0;</u></strong><strong><u>: Découverte des jointures externes</u></strong>
+			</p>
+			<p class="Standard">
+				Le contexte&#xa0;: gestion des commandes de produits maraîchers au sein d’une AMAP&#xa0;: les adhérents passent des commandes de produits (légumes, fruits …), dans le cadre de ventes. Ces produits sont fournis par des producteurs.
+			</p>
+			<p class="Standard">
+				La BD&#xa0;: AMAP.sql&#xa0;(script à importer MySql&#xa0;: création de la base, et structure + données des tables)
+			</p>
+			<p class="Standard" style="margin-bottom:0pt; line-height:normal">
+				1 - Pour chaque requête suivante&#xa0;:
+			</p>
+			<ul class="awlist1" style="margin:0pt; padding-left:0pt">
+				<li class="ListParagraph" style="margin-left:53.25pt; margin-bottom:0pt; text-indent:-18pt; line-height:normal">
+					<span style="width:14.63pt; font:7pt 'Times New Roman'; display:inline-block">&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0; </span><strong>exécutez</strong> la requête,
+				</li>
+				<li class="ListParagraph" style="margin-left:53.25pt; margin-bottom:0pt; text-indent:-18pt; line-height:normal">
+					<span style="width:14.63pt; font:7pt 'Times New Roman'; display:inline-block">&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0; </span>faites une copie d’écran du <strong>résultat obtenu</strong>,
+				</li>
+				<li class="ListParagraph" style="margin-left:53.25pt; margin-bottom:0pt; text-indent:-18pt; line-height:normal">
+					<span style="width:14.63pt; font:7pt 'Times New Roman'; display:inline-block">&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0; </span>formulez la requête <strong>en français</strong>,
+				</li>
+				<li class="ListParagraph" style="margin-left:53.25pt; margin-bottom:0pt; text-indent:-18pt; line-height:normal">
+					<span style="width:14.63pt; font:7pt 'Times New Roman'; display:inline-block">&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0;&#xa0; </span>et en déduire la <strong>fonction du nouvel opérateur</strong> utilisé
+				</li>
+			</ul>
+			<p class="ListParagraph" style="margin-left:53.25pt; margin-bottom:0pt; line-height:normal">
+				<span style="width:35.45pt; display:inline-block">&#xa0;</span>
+			</p>
+			<ol class="awlist2" style="margin:0pt; padding-left:0pt">
+				<li class="ListParagraph" style="margin-left:18pt; text-indent:-18pt">
+					<span style="width:4.07pt; font:7pt 'Times New Roman'; display:inline-block">&#xa0;&#xa0; </span>- SELECT adherents.*, commandes.idCommande, commandes.idAdherent
+				</li>
+			</ol>
+			<p class="ListParagraph" style="margin-left:21.3pt">
+				FROM adherents <strong>join</strong> commandes <strong>on</strong> adherents.idAdherent = commandes.idAdherent ;
+			</p>
+			<p class="ListParagraph" style="margin-left:21.3pt">
+				<img src="1740390719_tp-6-sql/1740390719_tp-6-sql-1.png" width="390" height="88" alt="" /><br />Requête en français : On cherche les adhérents en fonctions des commandes.
+			</p>
+			<p class="ListParagraph" style="margin-left:21.3pt">
+				<span style="color:#2a6099">‘Join on’ : Retourne le résultat qui contient les valeurs correspondantes dans les mêmes tables.</span>
+			</p>
+			<p class="Standard" style="margin-bottom:3pt; line-height:normal">
+				1.2 - SELECT adherents.*, commandes.idCommande, commandes.idAdherent
+			</p>
+			<p class="Standard" style="margin-bottom:3pt; line-height:normal">
+				&#xa0;FROM adherents <strong>natural join</strong> commandes ;
+			</p>
+			<p class="Standard" style="margin-bottom:3pt; line-height:normal">
+				<img src="1740390719_tp-6-sql/1740390719_tp-6-sql-2.png" width="390" height="85" alt="" /><br />Requête en français&#xa0;: On cherche les commandes en fonction des adhérents.
+			</p>
+			<p class="Standard" style="margin-bottom:3pt; line-height:normal">
+				&#xa0;
+			</p>
+			<p class="Standard" style="margin-bottom:3pt; line-height:normal">
+				<span style="color:#2a6099">‘natural join’</span><span style="color:#2a6099">&#xa0;</span><span style="color:#2a6099">: jointure naturelle entre 2 tables s’il y a au moins une colonne qui porte le même nom entre les 2 tables SQL</span>
+			</p>
+			<p class="Standard" style="margin-bottom:3pt; line-height:normal">
+				<span style="color:#0070c0">&#xa0;</span>
+			</p>
+			<p class="Standard" style="margin-bottom:3pt; line-height:normal">
+				<span style="color:#0070c0">&#xa0;</span>
+			</p>
+			<p class="Standard" style="margin-bottom:3pt; line-height:normal">
+				<span style="color:#0070c0">&#xa0;</span>
+			</p>
+			<p class="Standard" style="margin-bottom:3pt; line-height:normal">
+				<span style="color:#0070c0">&#xa0;</span>
+			</p>
+			<p class="Standard" style="margin-bottom:3pt; line-height:normal">
+				<span style="color:#0070c0">&#xa0;</span>
+			</p>
+			<p class="Standard" style="margin-bottom:3pt; line-height:normal">
+				<span style="color:#0070c0">&#xa0;</span>
+			</p>
+			<p class="Standard" style="margin-bottom:0pt">
+				1.3 - SELECT&#xa0; produits.*, categories.idCateg, categories.nomCategorie
+			</p>
+			<p class="Standard" style="margin-bottom:0pt">
+				FROM&#xa0; produits <strong>inner</strong> <strong>join</strong> categories <strong>on</strong> produits.idcategorie = categories.idcateg ;
+			</p>
+			<p class="Standard" style="margin-bottom:0pt">
+				<img src="1740390719_tp-6-sql/1740390719_tp-6-sql-3.png" width="634" height="109" alt="" style="float:left; position:relative" />
+			</p>
+			<p class="Standard" style="margin-bottom:0pt">
+				&#xa0;
+			</p>
+			<p class="Standard" style="margin-bottom:0pt">
+				&#xa0;
+			</p>
+			<p class="Standard" style="margin-bottom:0pt">
+				&#xa0;
+			</p>
+			<p class="Standard" style="margin-bottom:0pt">
+				&#xa0;
+			</p>
+			<p class="Standard" style="margin-bottom:0pt">
+				&#xa0;
+			</p>
+			<p class="Standard" style="margin-bottom:0pt">
+				&#xa0;
+			</p>
+			<p class="Standard" style="margin-bottom:0pt">
+				1.4 - SELECT&#xa0; produits.*, categories.idCateg, categories.nomCategorie
+			</p>
+			<p class="Standard" style="margin-bottom:0pt">
+				FROM&#xa0; produits <strong>natural join</strong> categories&#xa0;;
+			</p>
+			<p class="ListParagraph" style="margin-left:21.3pt">
+				&#xa0;
+			</p>
+			<ol start="5" class="awlist3" style="margin:0pt; padding-left:0pt">
+				<li class="ListParagraph" style="margin-left:18pt; text-indent:-18pt">
+					<span style="width:4.07pt; font:7pt 'Times New Roman'; display:inline-block">&#xa0;&#xa0; </span>- SELECT adherents.*, commandes.idCommande, commandes.idAdherent
+				</li>
+			</ol>
+			<p class="ListParagraph" style="margin-left:18pt">
+				FROM adherents <strong>left</strong> <strong>join</strong> commandes <strong>on</strong> adherents.idAdherent = commandes.idAdherent ;
+			</p>
+			<p class="Standard" style="margin-bottom:3pt">
+				1.6 -&#xa0; SELECT adherents.*, commandes.idCommande, commandes.idAdherent
+			</p>
+			<p class="ListParagraph" style="margin-left:18pt">
+				FROM adherents&#xa0; <strong>left join</strong> commandes <strong>on</strong> adherents.idAdherent = commandes.idAdherent
+			</p>
+			<p class="ListParagraph" style="margin-left:18pt">
+				WHERE commandes.idAdherent is null;
+			</p>
+			<p class="Standard" style="margin-bottom:3pt">
+				1.7 - SELECT adherents.*, commandes.idCommande, commandes.idAdherent
+			</p>
+			<p class="ListParagraph" style="margin-left:18pt">
+				FROM adherents&#xa0; <strong>left join</strong> commandes <strong>on</strong> adherents.idAdherent = commandes.idAdherent
+			</p>
+			<p class="ListParagraph" style="margin-left:18pt">
+				WHERE commandes.idCommande is null;
+			</p>
+			<p class="Standard" style="margin-left:21.3pt; margin-bottom:3pt; text-indent:-21.3pt; line-height:normal">
+				1.8 - SELECT adherents.*, commandes.idCommande, commandes.idAdherent
+			</p>
+			<p class="Standard" style="margin-left:21.3pt; margin-bottom:3pt; text-indent:-0.05pt; line-height:normal">
+				FROM adherents <strong>right join</strong> commandes <strong>on</strong> adherents.idAdherent = commandes.idAdherent ;
+			</p>
+			<p class="Standard" style="margin-left:21.3pt; margin-bottom:3pt; text-indent:-0.05pt; line-height:normal">
+				&#xa0;
+			</p>
+			<p class="Standard" style="margin-left:21.25pt; margin-bottom:3pt; text-indent:-21.25pt; line-height:normal">
+				1.9 - SELECT adherents.*, commandes.idCommande, commandes.idAdherent
+			</p>
+			<p class="Standard" style="margin-left:21.25pt; margin-bottom:3pt; line-height:normal">
+				FROM adherents <strong>right join</strong> commandes <strong>on</strong> adherents.idAdherent = commandes.idAdherent
+			</p>
+			<p class="Standard" style="margin-left:21.3pt; margin-bottom:3pt; text-indent:-0.05pt; line-height:normal">
+				WHERE commandes.idAdherent IS NULL;
+			</p>
+			<p class="Standard" style="line-height:115%; font-size:14pt">
+				<strong><u>Partie 2</u></strong><strong><u>&#xa0;</u></strong><strong><u>: Application</u></strong>
+			</p>
+			<p class="Standard">
+				2 - Ecrire les requêtes suivantes <strong>de plusieurs manières</strong>&#xa0;( avec également les jointures classiques) et testez les :
+			</p>
+			<p class="Standard" style="margin-bottom:3pt">
+				2.1 - Quantité totale commandée pour chaque produit commandé (avec id et Nom des produits)
+			</p>
+			<p class="Standard" style="margin-bottom:3pt">
+				2.2 - Id , nom et quantité totale commandée de tous les produits, qu’ils aient été commandés ou pas
+			</p>
+			<p class="Standard" style="margin-bottom:3pt">
+				2.3 - Id et Nom des produits qui n’ont pas été commandés
+			</p>
+			<p class="Standard" style="margin-bottom:3pt">
+				2.4 - Les produits (id et nom) qui ont été commandés dans la commande 1
+			</p>
+			<p class="Standard" style="margin-bottom:3pt">
+				2.5 - Les produits (id et nom) qui ont été commandés dans la commande 1, avec la date de la commande
+			</p>
+			<p class="Standard" style="margin-bottom:3pt">
+				2&#xa0;.6 - Les produits (id et nom) qui ont été commandés dans la commande 1, avec&#xa0; le nom de l’adhérent
+			</p>
+			<p class="Standard" style="margin-bottom:3pt">
+				2.7 - Les produits (id et nom) qui ont été commandés dans les commandes 1 et 2
+			</p>
+			<p class="Standard" style="margin-bottom:3pt">
+				2.8 - Les produits (id et nom) qui n’ont pas été commandés dans la commande 1
+			</p>
+			<p class="Standard" style="margin-bottom:3pt">
+				&#xa0;
+			</p>
+			<div style="clear:both">
+				<p class="Footer" style="page-break-before:always">
+					<em><span style="font-size:10pt; ">SQL - Jointures externes</span></em><span style="width:130.78pt; display:inline-block">&#xa0;</span><span style="width:221.22pt; display:inline-block">&#xa0;</span>1
+				</p>
+			</div>
+		</div>
+	<p style="bottom: 10px; right: 10px; position: absolute;"><a href="https://wordtohtml.net" target="_blank" style="font-size:11px; color: #d0d0d0">Converti en HTML avec WordToHTML.net</a> <span style="font-size:11px; color: #d0d0d0">|</span> <a href="https://wordtohtml.net" target="_blank" style="font-size:11px; color: #d0d0d0">Générateur de signature d'email</a></p>
+</body>
+</html>

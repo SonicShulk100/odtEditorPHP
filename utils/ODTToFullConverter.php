@@ -1,173 +1,121 @@
 <?php
 
-require_once "utils/Handler.php";
-require_once "utils/handlers/ParagraphHandler.php";
-require_once "utils/handlers/HeadingHandler.php";
-require_once "utils/handlers/ListHandler.php";
-require_once "utils/handlers/ListItemHandler.php";
-require_once "utils/handlers/SpanHandler.php";
-require_once "utils/handlers/TableHandler.php";
-require_once "utils/handlers/TableRowHandler.php";
-require_once "utils/handlers/TableCellHandler.php";
-require_once "utils/handlers/DefaultHandler.php";
+//Importations des classes nécessaires pour handlers/html
+require_once 'HTMLHandler.php';
+require_once 'handlers/html/ImageHTMLHandler.php';
+require_once 'handlers/html/ParagraphHTMLHandler.php';
+require_once 'handlers/html/StyleHTMLHandler.php';
+require_once 'handlers/html/ListHTMLHandler.php';
+require_once 'handlers/html/TableHTMLHandler.php';
+require_once "handlers/html/TextStyleHTMLHandler.php";
+require_once "handlers/html/HeadingHTMLHandler.php";
+require_once "handlers/html/DocumentStructureHTMLHandler.php";
+require_once "handlers/html/LinkHTMLHandler.php";
 
-class ODTToFullConverter {
-    private Handler $chain;
-    private array $styleMapping;
+//Importations des classes nécessaires pour CSS
+require_once "CSSHandler.php";
+require_once "handlers/css/FontCSSHandler.php";
+require_once "handlers/css/ParagraphCSSHandler.php";
+require_once "handlers/css/TableCSSHandler.php";
+require_once "handlers/css/HeadingStyleHandler.php";
+require_once "handlers/css/ImageCSSHandler.php";
+require_once "handlers/css/LinkCSSHandler.php";
+require_once "handlers/css/ListCSSHandler.php";
+
+class ODTToFullConverter
+{
+    private DocumentStructureHTMLHandler $htmlHandler;
+    private CSSHandler $cssHandler;
 
     public function __construct()
     {
-        // Initialize the chain of responsibility
-        $this->initializeChain();
+        // Configuration de la chaîne de responsabilité pour handlers/html
+        $this->htmlHandler = new DocumentStructureHTMLHandler();
+        $this->htmlHandler
+            ->setNext(new StyleHTMLHandler())
+            ->setNext(new HeadingHTMLHandler())
+            ->setNext(new ListHTMLHandler())
+            ->setNext(new ParagraphHTMLHandler())
+            ->setNext(new TableHTMLHandler())
+            ->setNext(new ImageHTMLHandler())
+            ->setNext(new TextStyleHTMLHandler())
+            ->setNext(new LinkHTMLHandler());
 
-        // Initialize style mapping
-        $this->styleMapping = [
-            // Text styles
-            'text:p' => 'p',
-            'text:h' => 'h',
-            'text:list' => 'ul',
-            'text:list-item' => 'li',
-            'text:span' => 'span',
-
-            // Table styles
-            'table:table' => 'table',
-            'table:table-row' => 'tr',
-            'table:table-cell' => 'td',
-
-            // Style properties mapping
-            'fo:font-weight' => 'font-weight',
-            'fo:font-style' => 'font-style',
-            'fo:font-size' => 'font-size',
-            'fo:color' => 'color',
-            'fo:background-color' => 'background-color',
-            'fo:text-align' => 'text-align',
-            'fo:margin-left' => 'margin-left',
-            'fo:margin-right' => 'margin-right',
-            'fo:margin-top' => 'margin-top',
-            'fo:margin-bottom' => 'margin-bottom',
-            'fo:padding' => 'padding',
-            'fo:line-height' => 'line-height',
-            'style:text-underline-style' => 'text-decoration'
-        ];
+        // Configuration de la chaîne de responsabilité pour CSS
+        $this->cssHandler = new FontCSSHandler();
+        $this->cssHandler
+            ->setNext(new ParagraphCSSHandler())
+            ->setNext(new TableCSSHandler())
+            ->setNext(new HeadingStyleHandler())
+            ->setNext(new ListCSSHandler())
+            ->setNext(new ImageCSSHandler())
+            ->setNext(new LinkCSSHandler());
     }
 
-    private function initializeChain(): void
-    {
-        // Create handlers
-        $paragraphHandler = new ParagraphHandler();
-        $headingHandler = new HeadingHandler();
-        $listHandler = new ListHandler();
-        $listItemHandler = new ListItemHandler();
-        $spanHandler = new SpanHandler();
-        $tableHandler = new TableHandler();
-        $tableRowHandler = new TableRowHandler();
-        $tableCellHandler = new TableCellHandler();
-        $defaultHandler = new DefaultHandler();
-
-        // Set up the chain
-        $paragraphHandler->setNext($headingHandler);
-        $headingHandler->setNext($listHandler);
-        $listHandler->setNext($listItemHandler);
-        $listItemHandler->setNext($spanHandler);
-        $spanHandler->setNext($tableHandler);
-        $tableHandler->setNext($tableRowHandler);
-        $tableRowHandler->setNext($tableCellHandler);
-        $tableCellHandler->setNext($defaultHandler);
-
-        // Set the first handler as the start of the chain
-        $this->chain = $paragraphHandler;
-    }
-
-    public function convert(string $contentXml, string $stylesXml): string
-    {
-        // Load XML content
-        $contentDoc = new DOMDocument();
-        $contentDoc->loadXML($contentXml);
-
-        $stylesDoc = new DOMDocument();
-        $stylesDoc->loadXML($stylesXml);
-
-        // Extract styles from stylesXml
-        $styles = $this->extractStyles($stylesDoc);
-
-        // Process content with the chain of handlers
-        $html = '';
-        $rootElement = $contentDoc->documentElement;
-
-        // Process each child node
-        foreach ($rootElement->childNodes as $node) {
-            if ($node->nodeType === XML_ELEMENT_NODE) {
-                $html .= $this->chain->handle([
-                    'node' => $node,
-                    'styles' => $styles,
-                    'mapping' => $this->styleMapping
-                ]);
-            }
+    /**
+     * @throws RunTimeException|Exception
+     */
+    public function convert(string $odtFilePath): string{
+        $zip = new ZipArchive();
+        if($zip->open($odtFilePath) !== TRUE){
+            $zip->close();
+            throw new RuntimeException("Could not open ODT file.");
         }
 
-        return $this->wrapInHtml($html, $styles);
+        $contentXML = $zip->getFromName("content.xml");
+        if($contentXML === false){
+            $zip->close();
+            throw new RuntimeException("Could not extract content.xml from ODT File");
+        }
+
+        $images = [];
+        $htmlContent = $this->htmlHandler->handle($contentXML, $zip, $images);
+
+        $stylesXML = $zip->getFromName("styles.xml");
+        if($stylesXML === false){
+            $zip->close();
+            throw new RuntimeException("Could not extract styles.xml from ODT File");
+        }
+
+        $xml = new SimpleXMLElement($stylesXML);
+        $cssArray = [];
+        $this->cssHandler->handle($xml, $cssArray);
+        $css = implode("\n", array_unique($cssArray)); // Ensure unique CSS rules
+
+        return $this->injectCSSIntoHTML($htmlContent, $css);
     }
 
-    private function extractStyles(DOMDocument $stylesDoc): array
-    {
-        $styles = [];
-        // Extract style definitions from the styles.xml
-        $styleElements = $stylesDoc->getElementsByTagName('style');
+    private function injectCSSIntoHTML($html, string $css){
+        if(is_string($html)){
+            $pattern = '/<style>(.*?)<\/style>/s';
+            if(preg_match($pattern, $html)){
+                return preg_replace($pattern, "<style>\n$css\n</style>", $html);
+            }
 
-        foreach ($styleElements as $style) {
-            $styleName = $style->getAttribute('style:name');
-            $properties = [];
+            return preg_replace('/<head>(.*?)<\/head>/s', "<head>$1<style>\n$css\n</style></head>", $html);
+        }
 
-            $propertyNodes = $style->getElementsByTagName('style:text-properties');
-            foreach ($propertyNodes as $propNode) {
-                foreach ($this->styleMapping as $odtProp => $cssProp) {
-                    if ($propNode->hasAttribute($odtProp)) {
-                        $properties[$cssProp] = $propNode->getAttribute($odtProp);
+        if(is_array($html)){
+            $styleFound = false;
+            foreach($html as $key => $value){
+                if(is_string($value) && str_contains($value, '<style>') && str_contains($value, '</style>')){
+                    $html[$key] = str_replace('<style></style>', "<style>\n$css\n</style>", $value);
+                    $styleFound = true;
+                    break;
+                }
+            }
+
+            if(!$styleFound){
+                foreach($html as $key => $value){
+                    if(is_string($value) && str_contains($value, "<head>")){
+                        $html[$key] = str_replace('<head></head>', "<head>\n<style>\n$css\n</style><title>Converted Document</title>", $value);
+                        break;
                     }
                 }
             }
 
-            $styles[$styleName] = $properties;
+            return $html;
         }
-
-        return $styles;
-    }
-
-    private function wrapInHtml(string $content, array $styles): string
-    {
-        $css = $this->generateCSS($styles);
-
-        return <<<HTML
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <title>Converted Document</title>
-    <style>
-    $css
-    </style>
-</head>
-<body>
-    $content
-</body>
-</html>
-HTML;
-    }
-
-    private function generateCSS(array $styles): string
-    {
-        $css = '';
-
-        foreach ($styles as $styleName => $properties) {
-            $css .= ".$styleName {\n";
-
-            foreach ($properties as $property => $value) {
-                $css .= "    $property: $value;\n";
-            }
-
-            $css .= "}\n\n";
-        }
-
-        return $css;
+        return $html;
     }
 }
