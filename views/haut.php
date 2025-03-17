@@ -28,5 +28,6 @@ if(session_status() === PHP_SESSION_NONE){
     }
     .header{
         justify-items: center;
+        text-decoration: none;
     }
 </style>

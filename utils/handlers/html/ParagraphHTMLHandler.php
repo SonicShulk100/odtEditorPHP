@@ -3,7 +3,7 @@
 require_once "utils/HTMLHandler.php";
 
 class ParagraphHTMLHandler extends HTMLHandler{
-    public function handle($content, ZipArchive $zip, &$images)
+    public function handle($content, ZipArchive $zip, &$images): string
     {
         $pattern = '/<text:p text:style-name="([^"]*)">(.*?)<\/text:p>/s';
 

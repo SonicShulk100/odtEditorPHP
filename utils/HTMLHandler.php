@@ -6,7 +6,7 @@
  */
 
 abstract class HTMLHandler {
-    protected ?HTMLHandler $nextHandler;
+    protected ?HTMLHandler $nextHandler = null;
 
     public function setNext(HTMLHandler $handler): HTMLHandler {
         $this->nextHandler = $handler;

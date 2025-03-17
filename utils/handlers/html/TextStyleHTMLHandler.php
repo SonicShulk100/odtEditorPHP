@@ -3,7 +3,8 @@
 require_once "utils/HTMLHandler.php";
 
 class TextStyleHTMLHandler extends HTMLHandler {
-    public function handle($content, ZipArchive $zip, &$images) {
+    public function handle($content, ZipArchive $zip, &$images): string
+    {
         // Process inline text styling
 
         // Convert text spans with styling

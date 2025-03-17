@@ -3,7 +3,7 @@
 require_once "utils/HTMLHandler.php";
 
 class ListHTMLHandler extends HTMLHandler{
-    public function handle($content, ZipArchive $zip, &$images)
+    public function handle($content, ZipArchive $zip, &$images): string
     {
         // Process list structures
 

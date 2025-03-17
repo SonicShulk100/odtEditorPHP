@@ -3,7 +3,7 @@
 require_once "utils/HTMLHandler.php";
 
 class TableHTMLHandler extends HTMLHandler{
-    public function handle($content, ZipArchive $zip, &$images)
+    public function handle($content, ZipArchive $zip, &$images): string
     {
         // Process table structures
 
@@ -34,6 +34,12 @@ class TableHTMLHandler extends HTMLHandler{
             '<td>$1</td>',
             $content
         );
+
+        $content = preg_replace("/<text:table>(.*?)<\/text:table>/s", "<table>$1</table>", $content);
+
+        $content =preg_replace("/<text:table-row>(.*?)<\/text:table-row>/s", "<tr>$1</tr>", $content);
+
+        $content = preg_replace("/<text:table-cell>(.*?)<\/text:table-cell>/s", "<td>$1</td>", $content);
 
         return parent::handle($content, $zip, $images);
     }

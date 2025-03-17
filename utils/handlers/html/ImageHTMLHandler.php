@@ -4,14 +4,15 @@
 require_once 'utils/HTMLHandler.php';
 
 class ImageHTMLHandler extends HTMLHandler {
+    #[Override]
     /**
      * Gère la conversion des images
      * @param $content
      * @param ZipArchive $zip
      * @param $images
-     * @return array|mixed|string|string[]|null la nouvelle valeur de content
+     * @return string la nouvelle valeur de content
      */
-    public function handle($content, ZipArchive $zip, &$images): mixed
+    public function handle($content, ZipArchive $zip, &$images): string
     {
         // Handle image conversion
         // Extract images from the ODT content and encode them as base64
