@@ -1,13 +1,25 @@
 <?php
 
-class MathHTMLHandler extends HTMLHandler {
-    public function handle($content, ZipArchive $zip, &$images): string
+require_once "../HTMLHandler.php";
+
+class MathHTMLHandler implements HTMLHandler{
+    private ?HTMLHandler $nextHandler = null;
+
+
+    /**
+     * @inheritDoc
+     */
+    #[Override] public function setNext(HTMLHandler $handler): HTMLHandler
     {
-        $pattern = '/<text:math>(.*?)<\/text:math>/s';
-        $replacement = '<math>$1</math>';
+        $this->nextHandler = $handler;
+        return $this->nextHandler;
+    }
 
-        $content = preg_replace($pattern, $replacement, $content);
-
-        return parent::handle($content, $zip, $images);
+    /**
+     * @inheritDoc
+     */
+    #[Override] public function handle(string $request, ZipArchive $zip, array $images): string
+    {
+        return $this->nextHandler?->handle($request, $zip, $images);
     }
 }

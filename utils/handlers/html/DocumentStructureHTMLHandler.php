@@ -1,9 +1,24 @@
 <?php
 
-require_once "utils/HTMLHandler.php";
+require "../HTMLHandler.php";
 
-class DocumentStructureHTMLHandler extends HTMLHandler {
-    public function handle($content, ZipArchive $zip, &$images): string
+class DocumentStructureHTMLHandler implements HTMLHandler{
+    private ?HTMLHandler $nextHandler = null;
+
+
+    /**
+     * @inheritDoc
+     */
+    #[Override] public function setNext(HTMLHandler $handler): HTMLHandler
+    {
+        $this->nextHandler = $handler;
+        return $handler;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    #[Override] public function handle(string $request, ZipArchive $zip, array $images): string
     {
         // Fixes for content loading
         $dom = new DOMDocument('1.0', 'UTF-8');
@@ -13,11 +28,11 @@ class DocumentStructureHTMLHandler extends HTMLHandler {
         libxml_use_internal_errors(true);
 
         // Properly handle XML namespaces
-        if (!preg_match('/<\?xml/', $content)) {
-            $content = '<?xml version="1.0" encoding="UTF-8"?>' . $content;
+        if (!preg_match('/<\?xml/', $request)) {
+            $request = '<?xml version="1.0" encoding="UTF-8"?>' . $request;
         }
 
-        $loadResult = $dom->loadXML($content);
+        $loadResult = $dom->loadXML($request);
         $errors = libxml_get_errors();
         libxml_clear_errors();
 
@@ -74,7 +89,7 @@ class DocumentStructureHTMLHandler extends HTMLHandler {
         $html .= '</html>';
 
         // Continue with the chain
-        return parent::handle($html, $zip, $images);
+        return $this->nextHandler?->handle($html, $zip, $images);
     }
 
     /**

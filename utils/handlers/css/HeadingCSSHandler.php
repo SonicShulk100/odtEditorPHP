@@ -2,9 +2,10 @@
 
 require_once "../CSSHandler.php";
 
-class LinkCSSHandler implements CSSHandler
+class HeadingCSSHandler implements CSSHandler
 {
     private ?CSSHandler $nextHandler = null;
+
 
     /**
      * @inheritDoc

@@ -1,32 +1,25 @@
 <?php
 
-require_once "utils/HTMLHandler.php";
+require_once "../HTMLHandler.php";
 
-class TextStyleHTMLHandler extends HTMLHandler {
-    public function handle($content, ZipArchive $zip, &$images): string
+class TextStyleHTMLHandler implements HTMLHandler
+{
+    private ?HTMLHandler $nextHandler = null;
+
+    /**
+     * @inheritDoc
+     */
+    #[Override] public function setNext(HTMLHandler $handler): HTMLHandler
     {
-        // Process inline text styling
+        $this->nextHandler = $handler;
+        return $handler;
+    }
 
-        // Convert text spans with styling
-        $pattern = '/<text:span text:style-name="([^"]*)">(.*?)<\/text:span>/s';
-        $replacement = '<span class="t-$1">$2</span>';
-        $content = preg_replace($pattern, $replacement, $content);
-
-        // Handle bold text
-        $content = preg_replace(
-            '/<span class="t-(T[23])">(.*?)<\/span>/s',
-            '<strong>$2</strong>',
-            $content
-        );
-
-        // Handle italic text
-        $content = preg_replace(
-            '/<span class="t-(T1)">(.*?)<\/span>/s',
-            '<em>$2</em>',
-            $content
-        );
-
-        // Pass to next handler
-        return parent::handle($content, $zip, $images);
+    /**
+     * @inheritDoc
+     */
+    #[Override] public function handle(string $request, ZipArchive $zip, array $images): string
+    {
+        return $this->nextHandler?->handle($request, $zip, $images);
     }
 }

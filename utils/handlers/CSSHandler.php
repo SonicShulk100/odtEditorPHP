@@ -3,7 +3,8 @@
 /**
  * Interface pour la conversion de XML dans le fichier styles.xml en CSS.
  */
-interface CSSHandler{
+interface CSSHandler
+{
     /**
      * Faire passer vers un autre Handler.
      * @param CSSHandler $handler le handler récent.
@@ -15,7 +16,7 @@ interface CSSHandler{
      * Convertit une partie de XML en CSS.
      * @param SimpleXMLElement $XML une partie XML en question.
      * @param array $css le CSS convertit
-     * @return void la méthode ne renvoie rien.
+     * @return string la méthode ne renvoie rien.
      */
-    public function handle(SimpleXMLElement $XML, array &$css): void;
+    public function handle(SimpleXMLElement $XML, array &$css): string;
 }

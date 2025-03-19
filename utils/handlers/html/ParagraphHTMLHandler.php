@@ -1,22 +1,25 @@
 <?php
 
-require_once "utils/HTMLHandler.php";
+require_once "../HTMLHandler.php";
 
-class ParagraphHTMLHandler extends HTMLHandler{
-    public function handle($content, ZipArchive $zip, &$images): string
+class ParagraphHTMLHandler implements HTMLHandler
+{
+    private ?HTMLHandler $nextHandler = null;
+
+    /**
+     * @inheritDoc
+     */
+    #[Override] public function setNext(HTMLHandler $handler): HTMLHandler
     {
-        $pattern = '/<text:p text:style-name="([^"]*)">(.*?)<\/text:p>/s';
+        $this->nextHandler = $handler;
+        return $handler;
+    }
 
-        $replacement = '<p class="p-$1">$2</p>';
-
-        $content = preg_replace($pattern, $replacement, $content);
-
-        $content = preg_replace(
-            "/<text:p>(.*?)<\/text:p>/s",
-            "<p>$1</p>",
-            $content
-        );
-
-        return parent::handle($content, $zip, $images);
+    /**
+     * @inheritDoc
+     */
+    #[Override] public function handle(string $request, ZipArchive $zip, array $images): string
+    {
+        return $this->nextHandler?->handle($request, $zip, $images);
     }
 }

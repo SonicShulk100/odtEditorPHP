@@ -1,15 +1,24 @@
 <?php
 
-require_once "utils/HTMLHandler.php";
+require "../HTMLHandler.php";
 
-class DrawingHTMLHandler extends HTMLHandler {
-    public function handle($content, ZipArchive $zip, &$images): string
+class DrawingHTMLHandler implements HTMLHandler{
+    private ?HTMLHandler $nextHandler = null;
+
+    /**
+     * @inheritDoc
+     */
+    #[Override] public function setNext(HTMLHandler $handler): HTMLHandler
     {
-        $pattern = '/<draw:frame draw:name="([^"]*)" draw:style-name="([^"]*)" draw:text-box="true" svg:width="([^"]*)" svg:height="([^"]*)">(.*?)<\/draw:frame>/s';
-        $replacement = '<img src="$1" style="width: $2; height: $3;">';
+        $this->nextHandler = $handler;
+        return $handler;
+    }
 
-        $content = preg_replace($pattern, $replacement, $content);
-
-        return parent::handle($content, $zip, $images);
+    /**
+     * @inheritDoc
+     */
+    #[Override] public function handle(string $request, ZipArchive $zip, array $images): string
+    {
+        return $this->nextHandler?->handle($request, $zip, $images);
     }
 }

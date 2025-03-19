@@ -19,7 +19,7 @@ require_once "utils/handlers/html/DrawingHTMLHandler.php";
 require_once "utils/handlers/css/FontCSSHandler.php";
 require_once "utils/handlers/css/ParagraphCSSHandler.php";
 require_once "utils/handlers/css/TableCSSHandler.php";
-require_once "utils/handlers/css/HeadingStyleHandler.php";
+require_once "utils/handlers/css/HeadingCSSHandler.php";
 require_once "utils/handlers/css/ListCSSHandler.php";
 require_once "utils/handlers/css/ImageCSSHandler.php";
 require_once "utils/handlers/css/FrameCSSHandler.php";
@@ -30,8 +30,11 @@ require_once "utils/handlers/css/DrawingCSSHandler.php";
 
 class ODTToFullConverter
 {
+    //Handlers for both HTML and CSS
     private DocumentStructureHTMLHandler $htmlHandler;
-    private CSSHandler $cssHandler;
+    private PageCSSHandler $cssHandler;
+
+    //Conversion states.
     private array $conversionWarnings = [];
     private array $conversionErrors = [];
     private array $conversionStats = [];
@@ -58,16 +61,16 @@ class ODTToFullConverter
             ->setNext(new DrawingHTMLHandler());
 
         // Configuration of CSS handlers chain
-        $this->cssHandler = new FontCSSHandler();
+        $this->cssHandler = new PageCSSHandler();
         $this->cssHandler
             ->setNext(new ParagraphCSSHandler())
             ->setNext(new TableCSSHandler())
-            ->setNext(new HeadingStyleHandler())
+            ->setNext(new HeadingCSSHandler())
             ->setNext(new ListCSSHandler())
             ->setNext(new ImageCSSHandler())
             ->setNext(new FrameCSSHandler())
             ->setNext(new LinkCSSHandler())
-            ->setNext(new PageCSSHandler())
+            ->setNext(new FontCSSHandler())
             ->setNext(new MathCSSHandler())
             ->setNext(new DrawingCSSHandler());
     }
@@ -277,7 +280,7 @@ class ODTToFullConverter
             $metaXPath = new DOMXPath($metaDom);
 
             // Register namespaces
-            $metaXPath->registerNamespace('dc', 'http://purl.org/dc/elements/1.1/');
+            $metaXPath->registerNamespace('dc', 'https://purl.org/dc/elements/1.1/');
             $metaXPath->registerNamespace('meta', 'urn:oasis:names:tc:opendocument:xmlns:meta:1.0');
 
             // Extract metadata
