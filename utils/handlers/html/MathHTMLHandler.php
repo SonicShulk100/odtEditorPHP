@@ -1,7 +1,6 @@
 <?php
 
-require_once "../HTMLHandler.php";
-
+require_once "utils/handlers/HTMLHandler.php";
 class MathHTMLHandler implements HTMLHandler{
     private ?HTMLHandler $nextHandler = null;
 
@@ -20,6 +19,9 @@ class MathHTMLHandler implements HTMLHandler{
      */
     #[Override] public function handle(string $request, ZipArchive $zip, array $images): string
     {
+        $request = preg_replace("/<draw:object[^>]*>/", "<div>", $request);
+        $request = preg_replace("/<\/draw:object>/", "</div>", $request);
+
         return $this->nextHandler?->handle($request, $zip, $images);
     }
 }

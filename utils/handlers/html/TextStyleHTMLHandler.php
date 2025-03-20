@@ -1,6 +1,6 @@
 <?php
 
-require_once "../HTMLHandler.php";
+require_once "utils/handlers/HTMLHandler.php";
 
 class TextStyleHTMLHandler implements HTMLHandler
 {
@@ -20,6 +20,11 @@ class TextStyleHTMLHandler implements HTMLHandler
      */
     #[Override] public function handle(string $request, ZipArchive $zip, array $images): string
     {
+        $request = preg_replace("/<text:span[^>]*>/", "<span>", $request);
+        $request = preg_replace("/<\/text:span>/", "</span>", $request);
+
+        $request = preg_replace("/<text:line-break[^>]*>/", "<br>", $request);
+
         return $this->nextHandler?->handle($request, $zip, $images);
     }
 }

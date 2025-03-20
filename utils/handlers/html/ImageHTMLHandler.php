@@ -1,6 +1,6 @@
 <?php
 
-require "../HTMLHandler.php";
+require_once "utils/handlers/HTMLHandler.php";
 
 class ImageHTMLHandler implements HTMLHandler{
     private ?HTMLHandler $nextHandler = null;

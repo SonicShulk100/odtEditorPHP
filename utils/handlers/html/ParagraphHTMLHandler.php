@@ -1,6 +1,6 @@
 <?php
 
-require_once "../HTMLHandler.php";
+require_once "utils/handlers/HTMLHandler.php";
 
 class ParagraphHTMLHandler implements HTMLHandler
 {
@@ -20,6 +20,14 @@ class ParagraphHTMLHandler implements HTMLHandler
      */
     #[Override] public function handle(string $request, ZipArchive $zip, array $images): string
     {
+        $pattern = '/<text:p text:style-name="([^"]*)">(.*?)<\/text:p>/s';
+
+        $replacement = '<p class="p-$1">$2</p>';
+
+        $request = preg_replace($pattern, $replacement, $request);
+
+        $request = preg_replace("/<text:p>(.*?)<\/text:p>/s", "<p>$1</p>", $request);
+
         return $this->nextHandler?->handle($request, $zip, $images);
     }
 }

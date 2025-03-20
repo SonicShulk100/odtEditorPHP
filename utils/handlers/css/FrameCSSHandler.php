@@ -1,6 +1,6 @@
  <?php
 
- require_once "../CSSHandler.php";
+ require_once "utils/handlers/CSSHandler.php";
 
  class FrameCSSHandler implements CSSHandler
  {
@@ -20,6 +20,18 @@
       */
      #[Override] public function handle(SimpleXMLElement $XML, array &$css): string
      {
+         $existingFrames = [];
+
+         foreach($XML->xpath("//draw:frame") as $frame){
+             $name = (string) $frame["draw:name"];
+             $frameRule = ".$name { display: inline-block; }";
+
+             if(!in_array($frameRule, $existingFrames, true)){
+                 $existingFrames[] = $frameRule;
+                 $css[] = $frameRule;
+             }
+         }
+
          return $this->nextHandler?->handle($XML, $css);
      }
  }

@@ -1,6 +1,6 @@
 <?php
 
-require_once "../CSSHandler.php";
+require_once "utils/handlers/CSSHandler.php";
 
 class DrawingCSSHandler implements CSSHandler
 {
@@ -20,6 +20,17 @@ class DrawingCSSHandler implements CSSHandler
      */
     #[Override] public function handle(SimpleXMLElement $XML, array &$css): string
     {
-        return $this->nextHandler?->handle($XML, $css);
+        $existingDrawings = [];
+        foreach($XML->xpath("//draw:frame") as $frame){
+            $name = (string) $frame["draw:name"];
+            $drawingRule = ".$name { display: inline-block; }";
+
+            if(!in_array($drawingRule, $existingDrawings, true)){
+                $existingDrawings[] = $drawingRule;
+                $css[] = $drawingRule;
+            }
+        }
+
+        return preg_replace("/<draw:frame[^>]*>/", "<div>", $XML->asXML());
     }
 }

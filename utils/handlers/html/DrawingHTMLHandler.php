@@ -1,6 +1,6 @@
 <?php
 
-require "../HTMLHandler.php";
+require_once "utils/handlers/HTMLHandler.php";
 
 class DrawingHTMLHandler implements HTMLHandler{
     private ?HTMLHandler $nextHandler = null;
@@ -19,6 +19,7 @@ class DrawingHTMLHandler implements HTMLHandler{
      */
     #[Override] public function handle(string $request, ZipArchive $zip, array $images): string
     {
-        return $this->nextHandler?->handle($request, $zip, $images);
+        $request = preg_replace("/<draw:frame[^>]*>/", "<div>", $request);
+        return preg_replace("/<\/draw:frame>/", "</div>", $request);
     }
 }

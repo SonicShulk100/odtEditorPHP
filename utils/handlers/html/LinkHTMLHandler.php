@@ -1,6 +1,6 @@
 <?php
 
-require "../HTMLHandler.php";
+require_once "utils/handlers/HTMLHandler.php";
 
 class LinkHTMLHandler implements HTMLHandler{
 
@@ -20,6 +20,11 @@ class LinkHTMLHandler implements HTMLHandler{
      */
     #[Override] public function handle(string $request, ZipArchive $zip, array $images): string
     {
+        $pattern = "/<text:a xlink:href=\"(.*?)\"[^>]*>(.*?)<\/text:a>/";
+        $replacement = "<a href=\"$1\">$2</a>";
+
+        $request = preg_replace($pattern, $replacement, $request);
+
         return $this->nextHandler?->handle($request, $zip, $images);
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-require_once "../CSSHandler.php";
+require_once "utils/handlers/CSSHandler.php";
 
 class TableCSSHandler implements CSSHandler
 {
@@ -20,6 +20,17 @@ class TableCSSHandler implements CSSHandler
      */
     #[Override] public function handle(SimpleXMLElement $XML, array &$css): string
     {
+        $existingTables = [];
+        foreach($XML->xpath("//table:table") as $table){
+            $name = (string) $table["table:name"];
+            $tableRule = ".$name { border-collapse: collapse; }";
+
+            if(!in_array($tableRule, $existingTables, true)){
+                $existingTables[] = $tableRule;
+                $css[] = $tableRule;
+            }
+        }
+
         return $this->nextHandler?->handle($XML, $css);
     }
 }
