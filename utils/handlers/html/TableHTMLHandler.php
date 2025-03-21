@@ -20,24 +20,35 @@ class TableHTMLHandler implements HTMLHandler
      */
     #[Override] public function handle(string $request, ZipArchive $zip, array $images): string
     {
-        $request = preg_replace("/<table:table[^>]*>/", "<table>", $request);
-        $request = preg_replace("/<\/table:table>/", "</table>", $request);
+        // Process table structures
 
-        $request = preg_replace("/<table:table-row[^>]*>/", "<tr>", $request);
-        $request = preg_replace("/<\/table:table-row>/", "</tr>", $request);
+        // Convert tables
+        $request = preg_replace(
+            '/<table:table[^>]*>(.*?)<\/table:table>/s',
+            '<table>$1</table>',
+            $request
+        );
 
-        $request = preg_replace("/<table:table-cell[^>]*>/", "<td>", $request);
-        $request = preg_replace("/<\/table:table-cell>/", "</td>", $request);
+        // Convert rows
+        $request = preg_replace(
+            '/<table:table-row[^>]*>(.*?)<\/table:table-row>/s',
+            '<tr>$1</tr>',
+            $request
+        );
 
+        // Convert cells
+        $request = preg_replace(
+            '/<table:table-cell[^>]*>(.*?)<\/table:table-cell>/s',
+            '<td>$1</td>',
+            $request
+        );
 
-        $request = preg_replace("/<text:table[^>]*>/", "<table>", $request);
-        $request = preg_replace("/<\/text:table>/", "</table>", $request);
-
-        $request = preg_replace("/<text:table-row[^>]*>/", "<tr>", $request);
-        $request = preg_replace("/<\/text:table-row>/", "</tr>", $request);
-
-        $request = preg_replace("/<text:table-cell[^>]*>/", "<td>", $request);
-        $request = preg_replace("/<\/text:table-cell>/", "</td>", $request);
+        // Clean up cell paragraphs
+        $request = preg_replace(
+            '/<td><text:p[^>]*>(.*?)<\/text:p><\/td>/s',
+            '<td>$1</td>',
+            $request
+        );
 
         return $this->nextHandler?->handle($request, $zip, $images);
     }

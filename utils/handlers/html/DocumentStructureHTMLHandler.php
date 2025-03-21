@@ -30,7 +30,7 @@ class DocumentStructureHTMLHandler implements HTMLHandler{
         $xpath->registerNamespace("office", "urn:oasis:names:tc:opendocument:xmlns:office:1.0");
         $xpath->registerNamespace("text", "urn:oasis:names:tc:opendocument:xmlns:text:1.0");
 
-        $bodyContent = $xpath->query("/office:document-content/office:body/office:text");
+        $bodyContent = $xpath->query("//office:body/office:text")->item(0);
 
         if($bodyContent){
             $html = "<!DOCTYPE html><html lang='fr'><head><meta charset='UTF-8'><title>Converted Document</title></head><body>";

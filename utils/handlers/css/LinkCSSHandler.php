@@ -18,7 +18,7 @@ class LinkCSSHandler implements CSSHandler
     /**
      * @inheritDoc
      */
-    #[Override] public function handle(SimpleXMLElement $XML, array &$css): string
+    #[Override] public function handle(SimpleXMLElement $XML, array &$css): void
     {
         $existingLinks = [];
 
@@ -35,6 +35,6 @@ class LinkCSSHandler implements CSSHandler
             }
         }
 
-        return $this->nextHandler?->handle($XML, $css);
+        $this->nextHandler?->handle($XML, $css);
     }
 }

@@ -18,7 +18,7 @@ class ListCSSHandler implements CSSHandler
     /**
      * @inheritDoc
      */
-    #[Override] public function handle(SimpleXMLElement $XML, array &$css): string
+    #[Override] public function handle(SimpleXMLElement $XML, array &$css): void
     {
         $existingLists = [];
 
@@ -38,7 +38,9 @@ class ListCSSHandler implements CSSHandler
         foreach($XML->xpath("//style:list-style/list-level-style-number") as $list){
             $level = (int) $list["text:level"];
 
-            $listRule = "ol { list-style-type: none; counter-reset: list; } ol li { counter-increment: list; } ol li::before { content: counter(list) '. '; margin-right: 0.5em; }";
+            $numPrefix = (string) ($list->xpath("style:list-level-properties/@style:num-prefix")[0] ?? "");
+
+            $listRule = "ol li { list-style-type: none; } ol li::before { content: '$numPrefix counter(list-item) '.'; margin-right: 0.5em; }";
 
             if(!in_array($listRule, $existingLists, true)){
                 $existingLists[] = $listRule;
@@ -46,6 +48,6 @@ class ListCSSHandler implements CSSHandler
             }
         }
 
-        return $this->nextHandler?->handle($XML, $css);
+        $this->nextHandler?->handle($XML, $css);
     }
 }

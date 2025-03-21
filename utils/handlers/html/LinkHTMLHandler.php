@@ -20,11 +20,11 @@ class LinkHTMLHandler implements HTMLHandler{
      */
     #[Override] public function handle(string $request, ZipArchive $zip, array $images): string
     {
-        $pattern = "/<text:a xlink:href=\"(.*?)\"[^>]*>(.*?)<\/text:a>/";
-        $replacement = "<a href=\"$1\">$2</a>";
+        $pattern = '/<text:a xlink:gref="([^"]*)">(.*?)<\/text:a>/s';
 
-        $request = preg_replace($pattern, $replacement, $request);
+        $replacement = '<a href="$1">$2</a>';
 
-        return $this->nextHandler?->handle($request, $zip, $images);
+
+        return preg_replace($pattern, $replacement, $request);
     }
 }

@@ -23,15 +23,12 @@ class HeadingHTMLHandler implements HTMLHandler{
         $headingStyle = [
             "P3" => "h1",
             "P4" => "h2",
-            "P5" => "h3",
-            "P6" => "h4",
-            "P7" => "h5",
-            "P8" => "h6",
         ];
 
         foreach($headingStyle as $style => $heading){
-            $request = preg_replace("/<text:p text:style-name=\"$style\">/", "<$heading>", $request);
-            $request = preg_replace("/<\/text:p>/", "</$heading>", $request);
+            $pattern = '/<text:p text:style-name="' . $style . '">(.*?)<\/text:p>/s';
+            $replacement = "<$heading>$1</$heading>";
+            $request = preg_replace($pattern, $replacement, $request);
         }
 
         return $this->nextHandler?->handle($request, $zip, $images);

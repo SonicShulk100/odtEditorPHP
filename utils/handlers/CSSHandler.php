@@ -16,7 +16,7 @@ interface CSSHandler
      * Convertit une partie de XML en CSS.
      * @param SimpleXMLElement $XML une partie XML en question.
      * @param array $css le CSS convertit
-     * @return string la méthode ne renvoie rien.
+     * @return void la méthode ne renvoie rien.
      */
-    public function handle(SimpleXMLElement $XML, array &$css): string;
+    public function handle(SimpleXMLElement $XML, array &$css): void;
 }

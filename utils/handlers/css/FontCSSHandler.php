@@ -19,7 +19,7 @@ class FontCSSHandler implements CSSHandler
     /**
      * @inheritDoc
      */
-    #[Override] public function handle(SimpleXMLElement $XML, array &$css): string
+    #[Override] public function handle(SimpleXMLElement $XML, array &$css): void
     {
         $existingFonts = [];
 
@@ -34,6 +34,6 @@ class FontCSSHandler implements CSSHandler
             }
         }
 
-        return $this->nextHandler?->handle($XML, $css);
+        $this->nextHandler?->handle($XML, $css);
     }
 }

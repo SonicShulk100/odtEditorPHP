@@ -28,7 +28,7 @@ class ImageHTMLHandler implements HTMLHandler{
 
                 // Vérifier si l'image est trouvée dans le fichier ZIP
 
-                if (!$imageData) {
+                if ($imageData !== false) {
 
                     $base64Image = base64_encode($imageData);
 

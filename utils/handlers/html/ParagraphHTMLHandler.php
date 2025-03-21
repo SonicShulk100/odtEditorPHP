@@ -26,8 +26,11 @@ class ParagraphHTMLHandler implements HTMLHandler
 
         $request = preg_replace($pattern, $replacement, $request);
 
-        $request = preg_replace("/<text:p>(.*?)<\/text:p>/s", "<p>$1</p>", $request);
+        $request = preg_replace(
+            "/<text:p>(.*?)<\/text:p>/s",
+            "<p>$1</p>",
+            $request
+        );
 
-        return $this->nextHandler?->handle($request, $zip, $images);
-    }
+        return $this->nextHandler?->handle($request, $zip, $images);    }
 }

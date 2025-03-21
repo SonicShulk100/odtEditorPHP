@@ -18,7 +18,7 @@ class TableCSSHandler implements CSSHandler
     /**
      * @inheritDoc
      */
-    #[Override] public function handle(SimpleXMLElement $XML, array &$css): string
+    #[Override] public function handle(SimpleXMLElement $XML, array &$css): void
     {
         $existingTables = [];
         foreach($XML->xpath("//table:table") as $table){
@@ -31,6 +31,6 @@ class TableCSSHandler implements CSSHandler
             }
         }
 
-        return $this->nextHandler?->handle($XML, $css);
+        $this->nextHandler?->handle($XML, $css);
     }
 }

@@ -19,7 +19,7 @@ class ImageCSSHandler implements CSSHandler
     /**
      * @inheritDoc
      */
-    #[Override] public function handle(SimpleXMLElement $XML, array &$css): string
+    #[Override] public function handle(SimpleXMLElement $XML, array &$css): void
     {
         $existingImages = [];
         foreach($XML->xpath("//style:default-style[@style:family='graphic']/style:graphic-properties") as $style){
@@ -35,6 +35,6 @@ class ImageCSSHandler implements CSSHandler
             }
         }
 
-        return $this->nextHandler?->handle($XML, $css);
+        $this->nextHandler?->handle($XML, $css);
     }
 }

@@ -19,7 +19,7 @@ class HeadingCSSHandler implements CSSHandler
     /**
      * @inheritDoc
      */
-    #[Override] public function handle(SimpleXMLElement $XML, array &$css): string
+    #[Override] public function handle(SimpleXMLElement $XML, array &$css): void
     {
         $existingHeadings = [];
         foreach($XML->xpath("//style:style[@style:family='paragraph']") as $style){
@@ -41,6 +41,6 @@ class HeadingCSSHandler implements CSSHandler
             }
         }
 
-        return $this->nextHandler?->handle($XML, $css);
+        $this->nextHandler?->handle($XML, $css);
     }
 }
